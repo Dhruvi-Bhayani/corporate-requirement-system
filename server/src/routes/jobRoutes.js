@@ -54,4 +54,27 @@ router.post(
   }
 );
 
+// Public: list jobs
+router.get("/", async (req, res) => {
+  const { Job } = await import("../models/Job.js");
+  try {
+    const jobs = await Job.findAll();
+    res.json(jobs);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Public: job detail
+router.get("/:id", getJobDetail);
+
+// Protected: create job
+router.post("/", requireAuth, requireRole(["org_admin", "hr", "manager"]), createJob);
+
+// Protected: update job
+router.put("/:id", requireAuth, requireRole(["org_admin", "hr", "manager"]), updateJob);
+
+// Protected: delete job
+router.delete("/:id", requireAuth, requireRole(["org_admin", "hr", "manager"]), deleteJob);
+
 export default router;

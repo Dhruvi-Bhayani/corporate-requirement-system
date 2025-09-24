@@ -62,3 +62,28 @@ export const updateApplicationStatus = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// HR/Manager: view all applications for a job
+export const getJobApplications = async (req, res) => {
+  try {
+    const { jobId } = req.params;
+
+    // Check if job exists
+    const job = await Job.findByPk(jobId);
+    if (!job) return res.status(404).json({ error: "Job not found" });
+
+    // Optional: Only allow HR/Manager of same org
+    if (req.user.orgId !== job.organization_id) {
+      return res.status(403).json({ error: "Not authorized to view applications for this job" });
+    }
+
+    const applications = await Application.findAll({
+      where: { job_id: jobId },
+      include: ["User"], // include applicant info
+    });
+
+    res.json(applications);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
