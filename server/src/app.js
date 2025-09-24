@@ -3,9 +3,10 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { sequelize } from './db.js';
 import authRoutes from "./routes/authRoutes.js";
-
-
-
+import jobRoutes from "./routes/jobRoutes.js";
+import orgRoutes from "./routes/orgRoutes.js";
+import profileRoutes from "./routes/profileRoutes.js";
+import applicationRoutes from "./routes/applicationRoutes.js";
 
 // Import models
 import { User } from './models/User.js';
@@ -20,6 +21,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authRoutes);
+
+app.use("/api/jobs", jobRoutes);
+app.use("/api/org", orgRoutes);
+app.use("/api/profile", profileRoutes);
+app.use("/api/applications", applicationRoutes);
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
