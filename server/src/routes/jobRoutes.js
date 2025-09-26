@@ -1,6 +1,12 @@
 // src/routes/jobRoutes.js
 import express from "express";
 import { requireAuth, requireRole } from "../middleware/authMiddleware.js";
+import {
+  createJob,
+  getJobDetail,
+  updateJob,
+  deleteJob
+} from "../controllers/jobController.js";
 import { Job } from "../models/Job.js";
 
 const router = express.Router();

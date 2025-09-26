@@ -2,10 +2,11 @@
 import express from "express";
 import { requireAuth, requireRole } from "../middleware/authMiddleware.js";
 import {
-  applyJob,
+  getJobApplications, applyJob,
   getUserApplications,
   updateApplicationStatus,
 } from "../controllers/applicationController.js";
+
 
 const router = express.Router();
 
