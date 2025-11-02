@@ -7,6 +7,7 @@ import jobRoutes from "./routes/jobRoutes.js";
 import orgRoutes from "./routes/orgRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
+import userRoutes from './routes/userRoutes.js'; // <-- import user routes
 
 // Import models
 import { User } from './models/User.js';
@@ -26,6 +27,8 @@ app.use("/api/jobs", jobRoutes);
 app.use("/api/org", orgRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/applications", applicationRoutes);
+// Add this line with other API routes
+app.use('/api/users', userRoutes);
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 

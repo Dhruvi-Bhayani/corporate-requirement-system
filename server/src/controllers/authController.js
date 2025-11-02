@@ -95,19 +95,30 @@ export const login = async (req, res) => {
     if (!user) return res.status(404).json({ error: "User not found" });
 
     if (!user.password_hash) {
-        return res.status(403).json({ error: "Invite not yet accepted." });
+      return res.status(403).json({ error: "Invite not yet accepted." });
     }
 
     const isMatch = await bcrypt.compare(password, user.password_hash);
     if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
+    // JWT payload: id, role, orgId (if exists)
     const token = jwt.sign(
-      { id: user.id, role: user.role, orgId: user.organization_id },
+      { id: user.id, role: user.role, orgId: user.organization_id || null },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
-    res.json({ message: "Login successful", token });
+    res.json({
+      message: "Login successful",
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        full_name: user.full_name,
+        orgId: user.organization_id || null
+      }
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
