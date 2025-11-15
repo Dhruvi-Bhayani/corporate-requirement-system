@@ -1,13 +1,47 @@
 // src/controllers/jobController.js
 import { Job } from "../models/Job.js";
+import { Op } from "sequelize";
+
+// export const createJob = async (req, res) => {
+//   try {
+//     const { title, description, location, employment_type, salary_min, salary_max } = req.body;
+//     const user = req.user; // from auth middleware
+
+//     if (!user.organization_id) {
+//       return res.status(403).json({ error: "Only organization users can create jobs" });
+//     }
+
+//     const job = await Job.create({
+//       title,
+//       description,
+//       location,
+//       employment_type,
+//       salary_min,
+//       salary_max,
+//       organization_id: user.orgId,
+//       created_by: user.id
+//     });
+
+//     res.json({ message: "Job created successfully", job });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// };
 
 export const createJob = async (req, res) => {
   try {
     const { title, description, location, employment_type, salary_min, salary_max } = req.body;
     const user = req.user; // from auth middleware
 
-    if (!user.organization_id) {
+    // ✅ Ensure only Org Admin / HR / Manager can create
+    if (!["org_admin", "hr", "manager"].includes(user.role)) {
       return res.status(403).json({ error: "Only organization users can create jobs" });
+    }
+
+    // ✅ Consistent organization ID
+    const organizationId = user.organization_id || user.orgId;
+    if (!organizationId) {
+      return res.status(400).json({ error: "Missing organization ID" });
     }
 
     const job = await Job.create({
@@ -17,15 +51,17 @@ export const createJob = async (req, res) => {
       employment_type,
       salary_min,
       salary_max,
-      organization_id: user.orgId,
+      organization_id: organizationId,
       created_by: user.id
     });
 
-    res.json({ message: "Job created successfully", job });
+    res.status(201).json({ message: "Job created successfully", job });
   } catch (err) {
+    console.error("Create job error:", err);
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // Get single job details
 export const getJobDetail = async (req, res) => {
@@ -88,6 +124,45 @@ export const deleteJob = async (req, res) => {
     await job.destroy();
     res.json({ message: "Job deleted successfully" });
   } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Search jobs by title, description, or location
+export const searchJobs = async (req, res) => {
+  try {
+    const q = req.query.q?.trim() || "";    // job title or keyword
+    const loc = req.query.loc?.trim() || ""; // location
+
+    // If both are empty, return all jobs
+    if (!q && !loc) {
+      const allJobs = await Job.findAll();
+      return res.json(allJobs);
+    }
+
+    const conditions = [];
+
+    if (q) {
+      conditions.push({
+        [Op.or]: [
+          { title: { [Op.like]: `%${q}%` } },
+          { description: { [Op.like]: `%${q}%` } },
+        ],
+      });
+    }
+
+    if (loc) {
+      conditions.push({
+        location: { [Op.like]: `%${loc}%` },
+      });
+    }
+
+    const where = conditions.length ? { [Op.and]: conditions } : {};
+
+    const jobs = await Job.findAll({ where });
+    res.json(jobs);
+  } catch (err) {
+    console.error("Search jobs error:", err);
     res.status(500).json({ error: err.message });
   }
 };

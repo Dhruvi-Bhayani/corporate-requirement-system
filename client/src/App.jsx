@@ -1,16 +1,18 @@
-// src/App.jsx
 import { Routes, Route } from "react-router-dom";
 import TopNavbar from "./components/Navbar";
 import Home from "./pages/home";
-import JobsList from "./pages/Jobs/JobsList"; // new page for listing jobs
+import JobsList from "./pages/Jobs/JobsList";
 import JobDetail from "./pages/Jobs/JobDetail";
-import CreateJob from "./pages/Jobs/CreateJob"; // optional page for org_admin/hr/manager
+import CreateJob from "./pages/Jobs/CreateJob";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import OrgDashboard from "./pages/Org/OrgDashboard";
 import SeekerDashboard from "./pages/Seeker/SeekerDashboard";
 import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
+import SearchResults from "./pages/SearchResults";
+import JobServices from "./pages/JobServices";
+
 
 export default function App() {
   return (
@@ -23,29 +25,49 @@ export default function App() {
           {/* Jobs */}
           <Route path="/jobs" element={<JobsList />} />
           <Route path="/jobs/:id" element={<JobDetail />} />
-          <Route path="/jobs/create" element={
-            <PrivateRoute allowedRoles={['org_admin','hr','manager']}>
-              <CreateJob />
-            </PrivateRoute>
-          } />
+          <Route path="/search" element={<SearchResults />} />
+          <Route path="/job-services" element={<JobServices />} />
+          <Route
+            path="/jobs/create"
+            element={
+              <PrivateRoute allowedRoles={['org_admin', 'hr', 'manager']}>
+                <CreateJob />
+              </PrivateRoute>
+            }
+          />
 
           {/* Auth */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
           {/* Profile */}
-          <Route path="/profile" element={
-            <PrivateRoute><Profile /></PrivateRoute>
-          } />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
 
           {/* Dashboards */}
-          <Route path="/org" element={
-            <PrivateRoute allowedRoles={['org_admin','hr','manager','recruiter']}><OrgDashboard /></PrivateRoute>
-          } />
+          <Route
+            path="/org"
+            element={
+              <PrivateRoute allowedRoles={['org_admin', 'hr', 'manager', 'recruiter']}>
+                <OrgDashboard />
+              </PrivateRoute>
+            }
+          />
 
-          <Route path="/seeker" element={
-            <PrivateRoute allowedRoles={['job_seeker']}><SeekerDashboard /></PrivateRoute>
-          } />
+          <Route
+            path="/seeker"
+            element={
+              <PrivateRoute allowedRoles={['job_seeker']}>
+                <SeekerDashboard />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </div>
     </>

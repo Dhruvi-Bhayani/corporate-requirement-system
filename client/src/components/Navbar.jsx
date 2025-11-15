@@ -12,12 +12,16 @@ export default function TopNavbar() {
         <Navbar.Brand as={Link} to="/" className="fw-bold text-primary">
           JobPortal
         </Navbar.Brand>
+
         <Navbar.Toggle aria-controls="navbar-nav" />
         <Navbar.Collapse id="navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/">Jobs</Nav.Link>
+            <Nav.Link as={Link} to="/jobs">Jobs</Nav.Link>
+            <Nav.Link as={Link} to="/job-services">Job Services</Nav.Link>
+            <Nav.Link as={Link} to="/dashboard">Dashboard</Nav.Link>
             <Nav.Link as={Link} to="/about">About</Nav.Link>
           </Nav>
+
           <Nav>
             {!user ? (
               <>
@@ -35,7 +39,7 @@ export default function TopNavbar() {
             ) : (
               <>
                 <span className="me-3 mt-1 fw-semibold">
-                  Hello, {user.fullName} {/* This will now show the actual name */}
+                  Hello, {user.fullName}
                 </span>
                 <Button variant="outline-danger" onClick={logout}>
                   Logout

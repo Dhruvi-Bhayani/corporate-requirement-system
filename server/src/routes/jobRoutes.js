@@ -4,7 +4,8 @@ import {
   createJob,
   getJobDetail,
   updateJob,
-  deleteJob
+  deleteJob,
+  searchJobs, // ✅ added
 } from "../controllers/jobController.js";
 
 const router = express.Router();
@@ -19,6 +20,9 @@ router.get("/", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// ✅ Search jobs by query (must be before /:id)
+router.get("/search", searchJobs);
 
 // GET single job by id (public)
 router.get("/:id", getJobDetail);

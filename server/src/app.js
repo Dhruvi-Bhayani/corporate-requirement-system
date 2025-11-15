@@ -7,6 +7,7 @@ import jobRoutes from "./routes/jobRoutes.js";
 import orgRoutes from "./routes/orgRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
+import statsRoutes from "./routes/statsRoutes.js";
 import userRoutes from './routes/userRoutes.js'; // <-- import user routes
 
 // Import models
@@ -31,6 +32,7 @@ app.use("/api/applications", applicationRoutes);
 app.use('/api/users', userRoutes);
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
+app.use("/api/stats", statsRoutes);
 
 const PORT = process.env.PORT || 3000;
 
