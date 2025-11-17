@@ -4,11 +4,11 @@ import { Table, Button, Modal, Form } from "react-bootstrap";
 import api from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
 
-export default function OrgDashboard(){
+export default function OrgDashboard() {
   const { user } = useAuth();
   const [jobs, setJobs] = useState([]);
   const [showCreate, setShowCreate] = useState(false);
-  const [form, setForm] = useState({ title:'', description:'', location:'', employment_type:'Full-time' });
+  const [form, setForm] = useState({ title: '', description: '', location: '', employment_type: 'Full-time' });
 
   const fetchJobs = () => {
     api.get(`/jobs?orgId=${user.orgId}`)
@@ -21,7 +21,7 @@ export default function OrgDashboard(){
   const createJob = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/jobs", {...form});
+      await api.post("/jobs", { ...form });
       setShowCreate(false);
       fetchJobs();
     } catch (err) { alert(err.response?.data?.error || "Create failed"); }
@@ -31,7 +31,7 @@ export default function OrgDashboard(){
     <>
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Your Organization Jobs</h2>
-        <Button onClick={()=>setShowCreate(true)}>Post Job</Button>
+        <Button onClick={() => setShowCreate(true)}>Post Job</Button>
       </div>
 
       <Table bordered hover>
@@ -52,19 +52,19 @@ export default function OrgDashboard(){
         </tbody>
       </Table>
 
-      <Modal show={showCreate} onHide={()=>setShowCreate(false)}>
+      <Modal show={showCreate} onHide={() => setShowCreate(false)}>
         <Form onSubmit={createJob}>
           <Modal.Header closeButton><Modal.Title>Create Job</Modal.Title></Modal.Header>
           <Modal.Body>
-            <Form.Group className="mb-2"><Form.Label>Title</Form.Label><Form.Control value={form.title} onChange={e=>setForm({...form, title:e.target.value})} required /></Form.Group>
-            <Form.Group className="mb-2"><Form.Label>Location</Form.Label><Form.Control value={form.location} onChange={e=>setForm({...form, location:e.target.value})} /></Form.Group>
-            <Form.Group className="mb-2"><Form.Label>Type</Form.Label><Form.Select value={form.employment_type} onChange={e=>setForm({...form, employment_type:e.target.value})}>
+            <Form.Group className="mb-2"><Form.Label>Title</Form.Label><Form.Control value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} required /></Form.Group>
+            <Form.Group className="mb-2"><Form.Label>Location</Form.Label><Form.Control value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} /></Form.Group>
+            <Form.Group className="mb-2"><Form.Label>Type</Form.Label><Form.Select value={form.employment_type} onChange={e => setForm({ ...form, employment_type: e.target.value })}>
               <option>Full-time</option><option>Part-time</option><option>Contract</option><option>Internship</option>
             </Form.Select></Form.Group>
-            <Form.Group className="mb-2"><Form.Label>Description</Form.Label><Form.Control as="textarea" rows={4} value={form.description} onChange={e=>setForm({...form, description:e.target.value})} /></Form.Group>
+            <Form.Group className="mb-2"><Form.Label>Description</Form.Label><Form.Control as="textarea" rows={4} value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} /></Form.Group>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={()=>setShowCreate(false)}>Cancel</Button>
+            <Button variant="secondary" onClick={() => setShowCreate(false)}>Cancel</Button>
             <Button type="submit">Create</Button>
           </Modal.Footer>
         </Form>

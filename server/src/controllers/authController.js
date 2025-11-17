@@ -3,27 +3,96 @@ import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
 import { Organization } from "../models/Organization.js";
 import crypto from "crypto";
+import { sendMail } from "../utils/sendMail.js";
 
-// 🔹 Register Job Seeker
+// 🔹 Register Job Seeker (with OTP)
 export const registerJobSeeker = async (req, res) => {
   try {
     const { email, password, full_name } = req.body;
+
+    // 1️⃣ Check required fields
+    if (!full_name || !email || !password) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    // 2️⃣ Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: "Invalid email format" });
+    }
+
+    // 3️⃣ Check if email already exists
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ error: "This email is already registered" });
+    }
+
+    // 4️⃣ Continue with OTP registration
     const hashedPassword = await bcrypt.hash(password, 10);
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
     const user = await User.create({
       email,
       password_hash: hashedPassword,
       full_name,
       role: "job_seeker",
+      otp_code: otp,
+      otp_expiry: new Date(Date.now() + 10 * 60 * 1000),
+      is_verified: false,
     });
 
-    res.json({ message: "Job Seeker registered successfully", user });
+    await sendMail(
+      email,
+      "Your Job Portal OTP Verification",
+      `
+        <h2>Hello ${full_name},</h2>
+        <p>Your OTP is:</p>
+        <h1>${otp}</h1>
+        <p>This OTP expires in 10 minutes.</p>
+      `
+    );
+
+    res.json({ message: "OTP sent to your email", email });
+
+  } catch (err) {
+    console.error("Register Job Seeker Error:", err);
+    res.status(500).json({ error: "Something went wrong. Try again!" });
+  }
+};
+
+
+// 🔹 Verify OTP
+export const verifyOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    const user = await User.findOne({ where: { email } });
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    if (user.is_verified)
+      return res.json({ message: "Already verified" });
+
+    if (user.otp_code !== otp)
+      return res.status(400).json({ error: "Invalid OTP" });
+
+    if (new Date() > user.otp_expiry)
+      return res.status(400).json({ error: "OTP expired" });
+
+    // Mark verified
+    user.is_verified = true;
+    user.otp_code = null;
+    user.otp_expiry = null;
+    await user.save();
+
+    res.json({ message: "OTP verified. You can now login." });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// 🔹 Register Organization + Admin
 export const registerOrg = async (req, res) => {
   try {
     const { org_name, email, password, full_name } = req.body;
@@ -31,19 +100,33 @@ export const registerOrg = async (req, res) => {
     const organization = await Organization.create({ name: org_name });
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
     const user = await User.create({
       email,
       password_hash: hashedPassword,
       full_name,
-      role: 'org_admin',
-      organization_id: organization.id
+      role: "org_admin",
+      organization_id: organization.id,
+      otp_code: otp,
+      otp_expiry: new Date(Date.now() + 10 * 60 * 1000),
+      is_verified: false,
     });
 
-    res.json({ message: "Organization and Admin registered successfully", organization, user });
+    await sendMail(
+      email,
+      "Your Organization Admin OTP Verification",
+      `<h1>Your OTP: ${otp}</h1>`
+    );
+
+    res.json({ message: "OTP sent to your email", email });
+
   } catch (err) {
+    console.error("Register Org Error:", err);
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // 🔹 Invite User (HR/Manager)
 export const inviteUser = async (req, res) => {
@@ -94,14 +177,17 @@ export const login = async (req, res) => {
     const user = await User.findOne({ where: { email } });
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    if (!user.password_hash) {
+    // BLOCK UNVERIFIED USERS
+    if (!user.is_verified)
+      return res.status(403).json({ error: "Please verify your OTP before login." });
+
+    if (!user.password_hash)
       return res.status(403).json({ error: "Invite not yet accepted." });
-    }
 
     const isMatch = await bcrypt.compare(password, user.password_hash);
-    if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
+    if (!isMatch)
+      return res.status(400).json({ error: "Invalid credentials" });
 
-    // JWT payload: id, role, orgId (if exists)
     const token = jwt.sign(
       { id: user.id, role: user.role, orgId: user.organization_id || null },
       process.env.JWT_SECRET,
@@ -116,9 +202,10 @@ export const login = async (req, res) => {
         email: user.email,
         role: user.role,
         full_name: user.full_name,
-        orgId: user.organization_id || null
-      }
+        orgId: user.organization_id || null,
+      },
     });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

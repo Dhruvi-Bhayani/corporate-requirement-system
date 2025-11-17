@@ -12,6 +12,8 @@ import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import SearchResults from "./pages/SearchResults";
 import JobServices from "./pages/JobServices";
+import VerifyOtp from "./pages/Auth/VerifyOtp";
+
 
 
 export default function App() {
@@ -35,6 +37,9 @@ export default function App() {
               </PrivateRoute>
             }
           />
+
+          <Route path="/verify-otp" element={<VerifyOtp />} />
+
 
           {/* Auth */}
           <Route path="/login" element={<Login />} />

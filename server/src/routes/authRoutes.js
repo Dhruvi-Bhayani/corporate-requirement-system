@@ -6,6 +6,7 @@ import {
   inviteUser,
   acceptInvite,
 } from "../controllers/authController.js";
+import { verifyOtp } from "../controllers/authController.js";
 
 const router = express.Router();
 
@@ -14,5 +15,6 @@ router.post("/register-org", registerOrg);
 router.post("/login", login);
 router.post("/invite", inviteUser);
 router.post("/accept-invite", acceptInvite);
+router.post("/verify-otp", verifyOtp);
 
 export default router;

@@ -10,11 +10,11 @@ export const Job = sequelize.define('Job', {
   title: { type: DataTypes.STRING, allowNull: false },
   description: { type: DataTypes.TEXT },
   location: { type: DataTypes.STRING },
-  employment_type: { type: DataTypes.ENUM('Full-time','Part-time','Contract','Internship') },
+  employment_type: { type: DataTypes.ENUM('Full-time', 'Part-time', 'Contract', 'Internship') },
   salary_min: { type: DataTypes.INTEGER },
   salary_max: { type: DataTypes.INTEGER },
   posted_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
-  status: { type: DataTypes.ENUM('draft','open','closed'), defaultValue: 'open' }
+  status: { type: DataTypes.ENUM('draft', 'open', 'closed'), defaultValue: 'open' }
 }, {
   tableName: 'jobs',
   timestamps: false

@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
-import JobCard from "../components/JobCard";
 import StatsSection from "../components/StatsSection";
 
 export default function Home() {
@@ -76,15 +75,7 @@ export default function Home() {
           ))}
         </div>
       </div>
-
-      {/* <h2 className="mb-3">Open Roles</h2>
-      {jobs.length ? (
-        jobs.map((job) => <JobCard job={job} key={job.id} />)
-      ) : (
-        <p>No open roles yet.</p>
-      )} */}
-
-    <StatsSection />
+      <StatsSection />
 
     </div>
   );

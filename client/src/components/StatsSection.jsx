@@ -23,20 +23,42 @@ export default function StatsSection() {
   ];
 
   return (
-    <div className="py-12 bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          {cards.map((item, i) => (
+     <div className="container my-5">
+      <div className="row text-center">
+
+        {cards.map((item, i) => (
+          <div key={i} className="col-12 col-sm-6 col-md-3 mb-4">
+
             <div
-              key={i}
-              className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300"
+              className="card p-4 h-100 border-0 shadow-sm"
+              style={{
+                transition: "all 0.3s ease",
+                cursor: "pointer"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-6px)";
+                e.currentTarget.style.boxShadow = "0 8px 20px rgba(0,0,0,0.15)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.10)";
+              }}
             >
-              <div className="text-4xl mb-3">{item.icon}</div>
-              <h3 className="text-3xl font-bold text-blue-600">{item.number}</h3>
-              <p className="text-gray-600 mt-2">{item.label}</p>
+
+              <div className="mb-2" style={{ fontSize: "2rem" }}>
+                {item.icon}
+              </div>
+
+              <h3 className="fw-bold" style={{ fontSize: "2rem", color: "#000000" }}>
+                {item.number}
+              </h3>
+
+              <p className="text-muted mt-2">{item.label}</p>
             </div>
-          ))}
-        </div>
+
+          </div>
+        ))}
+
       </div>
     </div>
   );

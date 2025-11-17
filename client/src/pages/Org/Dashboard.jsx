@@ -37,25 +37,25 @@ const Dashboard = () => {
           </tr>
         </thead>
         <tbody>
-  {users.length > 0 ? (
-    users.map((u) => (
-      <tr key={u.id}>
-        <td className="border px-4 py-2">{u.id}</td>
-        <td className="border px-4 py-2">{u.full_name}</td>
-        <td className="border px-4 py-2">{u.email}</td>
-        <td className="border px-4 py-2">{u.role || "-"}</td>
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td className="border px-4 py-2 text-center" colSpan="4">
-        No users found
-      </td>
-    </tr>
-  )}
-</tbody>
+          {users.length > 0 ? (
+            users.map((u) => (
+              <tr key={u.id}>
+                <td className="border px-4 py-2">{u.id}</td>
+                <td className="border px-4 py-2">{u.full_name}</td>
+                <td className="border px-4 py-2">{u.email}</td>
+                <td className="border px-4 py-2">{u.role || "-"}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td className="border px-4 py-2 text-center" colSpan="4">
+                No users found
+              </td>
+            </tr>
+          )}
+        </tbody>
 
-        </table>
+      </table>
     </div>
   );
 };

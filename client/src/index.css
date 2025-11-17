@@ -1,13 +1,22 @@
-:root{
-  --brand:#0d6efd;
+:root {
+  --brand: #0d6efd;
 }
 
 /* container spacing already handled by bootstrap */
-.text-truncate { white-space: normal; } /* allow description wrapping; remove if you prefer truncation */
+.text-truncate {
+  white-space: normal;
+}
 
-.card:hover { transform: translateY(-2px); transition: all .18s ease; }
+/* allow description wrapping; remove if you prefer truncation */
+
+.card:hover {
+  transform: translateY(-2px);
+  transition: all .18s ease;
+}
 
 /* responsive card improvements */
 @media (max-width: 768px) {
-  .card-body { padding: 1rem; }
+  .card-body {
+    padding: 1rem;
+  }
 }

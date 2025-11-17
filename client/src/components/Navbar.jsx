@@ -39,9 +39,12 @@ export default function TopNavbar() {
             ) : (
               <>
                 <span className="me-3 mt-1 fw-semibold">
-                  Hello, {user.fullName}
+                  Hello, {user.full_name}
                 </span>
-                <Button variant="outline-danger" onClick={logout}>
+                <Button variant="outline-danger" onClick={() => {
+                  logout();
+                  navigate("/login");
+                }}>
                   Logout
                 </Button>
               </>

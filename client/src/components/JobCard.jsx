@@ -10,7 +10,7 @@ export default function JobCard({ job }) {
           <div>
             <Card.Title>{job.title}</Card.Title>
             <Card.Subtitle className="mb-2 text-muted">{job.location || 'Remote'}</Card.Subtitle>
-            <Card.Text className="text-truncate" style={{maxWidth: 600}}>
+            <Card.Text className="text-truncate" style={{ maxWidth: 600 }}>
               {job.description}
             </Card.Text>
           </div>

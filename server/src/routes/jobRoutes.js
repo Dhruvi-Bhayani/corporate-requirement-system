@@ -5,7 +5,7 @@ import {
   getJobDetail,
   updateJob,
   deleteJob,
-  searchJobs, // ✅ added
+  searchJobs,
 } from "../controllers/jobController.js";
 
 const router = express.Router();

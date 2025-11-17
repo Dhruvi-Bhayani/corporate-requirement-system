@@ -9,7 +9,7 @@ export const Application = sequelize.define('Application', {
   applicant_id: { type: DataTypes.BIGINT, allowNull: false, references: { model: User, key: 'id' } },
   cover_letter: { type: DataTypes.TEXT },
   resume_url: { type: DataTypes.STRING(1024) },
-  status: { type: DataTypes.ENUM('applied','screening','interview','offer','rejected'), defaultValue: 'applied' },
+  status: { type: DataTypes.ENUM('applied', 'screening', 'interview', 'offer', 'rejected'), defaultValue: 'applied' },
   applied_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }
 }, {
   tableName: 'applications',

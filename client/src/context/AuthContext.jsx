@@ -6,25 +6,31 @@ export const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true); // 🔥 important
 
+  // Load user/token from localStorage
   useEffect(() => {
     try {
       const savedUser = localStorage.getItem("user");
       const savedToken = localStorage.getItem("token");
+
       if (savedUser && savedToken) {
         setUser(JSON.parse(savedUser));
         setToken(savedToken);
       }
-    } catch {
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
+    } finally {
+      setAuthLoading(false); // 🔥 allow app to render after loading auth
     }
   }, []);
 
-  // ✅ Updated login to call backend
+  // Login function
   const login = async (email, password) => {
     try {
-      const res = await axios.post("http://localhost:3000/api/auth/login", { email, password });
+      const res = await axios.post("http://localhost:3000/api/auth/login", {
+        email,
+        password,
+      });
+
       const { token, user } = res.data;
 
       setUser(user);
@@ -33,13 +39,14 @@ export function AuthProvider({ children }) {
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("token", token);
 
-      return true; // login success
+      return true;
     } catch (err) {
       console.error("Login error:", err.response?.data?.error || err.message);
-      return false; // login failed
+      return false;
     }
   };
 
+  // Logout function
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -48,8 +55,8 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
-      {children}
+    <AuthContext.Provider value={{ user, token, login, logout, authLoading }}>
+      {!authLoading && children} {/* 🔥 prevents redirect before user loads */}
     </AuthContext.Provider>
   );
 }

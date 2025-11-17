@@ -21,8 +21,8 @@ const Register = () => {
     setSuccess("");
 
     try {
-      let endpoint = key === "jobSeeker" 
-        ? "/auth/register-jobseeker" 
+      let endpoint = key === "jobSeeker"
+        ? "/auth/register-jobseeker"
         : "/auth/register-org";
 
       let payload;
@@ -44,14 +44,14 @@ const Register = () => {
       const res = await api.post(endpoint, payload);
 
       if (res.status === 200 || res.status === 201) {
-        setSuccess("Registration successful! Redirecting to login...");
-        setTimeout(() => navigate("/login"), 1500);
+        setSuccess("OTP sent to your email. Redirecting...");
+        setTimeout(() => navigate("/verify-otp"), 1500);
       }
     } catch (err) {
       console.error("Register error:", err);
       setError(
-        err.response?.data?.error || 
-        err.response?.data || 
+        err.response?.data?.error ||
+        err.response?.data ||
         "Registration failed. Please try again!"
       );
     }
@@ -64,10 +64,28 @@ const Register = () => {
           <Card className="shadow-lg p-4 border-0 rounded-4">
             <h3 className="text-center mb-4 fw-bold">Register</h3>
 
-            <Tabs activeKey={key} onSelect={(k) => setKey(k)} className="mb-4 justify-content-center">
+            <Tabs
+              activeKey={key}
+              onSelect={(k) => {
+                setKey(k);
+
+                // RESET FORM WHEN SWITCHING TABS
+                setFormData({
+                  fullName: "",
+                  orgName: "",
+                  email: "",
+                  password: "",
+                });
+
+                setError("");
+                setSuccess("");
+              }}
+              className="mb-4 justify-content-center"
+            >
               <Tab eventKey="jobSeeker" title="Job Seeker" />
               <Tab eventKey="organization" title="Organization/Admin" />
             </Tabs>
+
 
             <Form onSubmit={handleRegister}>
               {key === "organization" && (

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import api from "../../services/api";
 import { Table } from "react-bootstrap";
 
-export default function SeekerDashboard(){
+export default function SeekerDashboard() {
   const [apps, setApps] = useState([]);
 
   useEffect(() => {

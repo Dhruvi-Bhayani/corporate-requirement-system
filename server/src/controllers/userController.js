@@ -16,29 +16,29 @@ export const getAllUsers = async (req, res) => {
         // HR can see ALL job seekers (across all organizations)
         whereClause = { role: 'job_seeker' };
         break;
-      
+
       case 'job_seeker':
         // Job seekers can only see themselves
         whereClause = { id: id };
         break;
-      
+
       case 'org_admin':
         // Org admin can see ONLY other org_admins from same organization
-        whereClause = { 
+        whereClause = {
           role: 'org_admin',
           organization_id: orgId // only users from same organization
         };
         break;
-      
+
       case 'manager':
       case 'recruiter':
         // Managers and recruiters can see job seekers in their organization
-        whereClause = { 
+        whereClause = {
           role: 'job_seeker',
-          organization_id: orgId 
+          organization_id: orgId
         };
         break;
-      
+
       default:
         // Default: users can only see themselves
         whereClause = { id: id };

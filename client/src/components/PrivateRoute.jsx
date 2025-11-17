@@ -1,15 +1,15 @@
-// src/components/PrivateRoute.jsx
 import { useAuth } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
 
 export default function PrivateRoute({ children, allowedRoles }) {
-  const { user } = useAuth();
+  const { user, authLoading } = useAuth();
 
-  if (!user) return <Navigate to="/login" replace />;
+  if (authLoading) return null;
+
+  if (!user) return <Navigate to="/login" />;
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    // optional: redirect to home or show unauthorized page
-    return <Navigate to="/" replace />;
+    return <Navigate to="/login" />;
   }
 
   return children;

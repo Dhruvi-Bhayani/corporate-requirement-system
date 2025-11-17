@@ -12,7 +12,8 @@ body {
 }
 
 h3 {
-  color: #28a745; /* green for register heading */
+  color: #28a745;
+  /* green for register heading */
 }
 
 button.btn-success {
