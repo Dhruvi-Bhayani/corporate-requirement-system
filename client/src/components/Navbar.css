@@ -1,22 +1,46 @@
-.navbar {
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+/* Prevent content from hiding behind navbar */
+body {
+  padding-top: 95px !important;
+}/* ——— Strong navbar overrides — must load after Bootstrap ——— */
+.main-navbar {
+  background: #ffffff !important;
+  padding: 15px 0 !important;
+  min-height: 80px !important;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08) !important;
 }
 
-.navbar:hover {
-  background-color: #f8f9fa;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+/* Force logo size and prevent stretching */
+.main-navbar .navbar-brand img,
+.main-navbar .navbar-brand > img {
+  height: 55px !important;
+  width: auto !important;
+  object-fit: contain !important;
+  display: block !important;
 }
 
-.navbar-brand {
-  font-size: 1.4rem;
-  letter-spacing: 0.5px;
+/* FORCE link color — overrides Bootstrap */
+.main-navbar .nav-link {
+  color: #0b1226 !important;        /* <-- set the exact color you want (dark blue-ish) */
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  margin-right: 12px !important;
+  transition: color 0.18s ease !important;
 }
 
-.nav-link {
-  font-weight: 500;
-  transition: color 0.2s ease;
+/* Hover + active */
+.main-navbar .nav-link:hover,
+.main-navbar .nav-link.active {
+  color: #0d6efd !important;        /* hover color (blue) */
 }
 
-.nav-link:hover {
-  color: #0d6efd;
+/* Buttons */
+.main-navbar .btn {
+  font-weight: 600 !important;
+  padding: 8px 20px !important;
+  border-radius: 8px !important;
+}
+
+/* Mobile: ensure collapsed menu links keep color */
+.main-navbar .navbar-collapse .nav-link {
+  color: #0b1226 !important;
 }

@@ -6,21 +6,23 @@ export const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-  const [authLoading, setAuthLoading] = useState(true); // 🔥 important
+  const [authLoading, setAuthLoading] = useState(true);
 
-  // Load user/token from localStorage
+  // 🔥 GLOBAL AUTH POPUP STATES
+  const [showPopup, setShowPopup] = useState(false);
+  const [authMode, setAuthMode] = useState("login"); // login | signup
+
+  // Load user & token from localStorage
   useEffect(() => {
-    try {
-      const savedUser = localStorage.getItem("user");
-      const savedToken = localStorage.getItem("token");
+    const savedUser = localStorage.getItem("user");
+    const savedToken = localStorage.getItem("token");
 
-      if (savedUser && savedToken) {
-        setUser(JSON.parse(savedUser));
-        setToken(savedToken);
-      }
-    } finally {
-      setAuthLoading(false); // 🔥 allow app to render after loading auth
+    if (savedUser && savedToken) {
+      setUser(JSON.parse(savedUser));
+      setToken(savedToken);
     }
+
+    setAuthLoading(false);
   }, []);
 
   // Login function
@@ -46,7 +48,7 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // Logout function
+  // Logout
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -55,8 +57,22 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, authLoading }}>
-      {!authLoading && children} {/* 🔥 prevents redirect before user loads */}
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        login,
+        logout,
+        authLoading,
+
+        // 🔥 POPUP CONTROLS
+        showPopup,
+        setShowPopup,
+        authMode,
+        setAuthMode,
+      }}
+    >
+      {!authLoading && children}
     </AuthContext.Provider>
   );
 }

@@ -32,22 +32,41 @@ export default function SearchResults() {
   }, [q, loc]);
 
   return (
-    <div className="container mt-4">
-      <h2>Search Results {q || loc ? <>for “{q}” {loc && <>in {loc}</>}</> : ""}</h2>
+  <div className="container mt-4">
 
-      {loading ? (
-        <p>Loading...</p>
-      ) : jobs.length === 0 ? (
-        <p>No jobs found.</p>
-      ) : (
-        <div className="row">
-          {jobs.map((job) => (
-            <div className="col-md-4 mb-4" key={job.id}>
-              <JobCard job={job} />
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+    {jobs.length > 0 && (
+      <h2 className="mb-4">
+        Search Results for “{q}”
+      </h2>
+    )}
+
+    {loading ? (
+      <p>Loading...</p>
+    ) : jobs.length === 0 ? (
+      <div className="text-center mt-5">
+        <img
+          src="/nodatafound.png"
+          alt="No results"
+          style={{ maxWidth: "300px", opacity: 0.85 }}
+        />
+        <p className="mt-3 text-muted fs-5">No jobs found.</p>
+        {/* 🔙 Back Button */}
+        <button
+          className="btn btn-outline-primary mb-3"
+          onClick={() => window.history.back()}
+        >
+          ← Back
+        </button>
+      </div>
+    ) : (
+      <div className="row mt-4">
+        {jobs.map((job) => (
+          <div className="col-md-4 mb-4" key={job.id}>
+            <JobCard job={job} />
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+);
 }

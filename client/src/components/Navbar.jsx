@@ -1,57 +1,85 @@
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import AuthPopup from "../pages/Auth/AuthPopup";
 
 export default function TopNavbar() {
-  const { user, logout } = useAuth();
+  const { user, logout, showPopup, setShowPopup, authMode, setAuthMode } = useAuth();
   const navigate = useNavigate();
 
   return (
-    <Navbar bg="light" expand="lg" className="shadow-sm mb-4">
-      <Container>
-        <Navbar.Brand as={Link} to="/" className="fw-bold text-primary">
-          JobPortal
-        </Navbar.Brand>
+    <>
+      <Navbar expand="lg" className="main-navbar shadow-sm">
+        <Container>
+          {/* LOGO */}
+          <Navbar.Brand as={Link} to="/">
+            <img src="/logo1.png" alt="Logo" style={{ height: "50px" }} />
+          </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls="navbar-nav" />
-        <Navbar.Collapse id="navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link as={Link} to="/jobs">Jobs</Nav.Link>
-            <Nav.Link as={Link} to="/job-services">Job Services</Nav.Link>
-            <Nav.Link as={Link} to="/dashboard">Dashboard</Nav.Link>
-            <Nav.Link as={Link} to="/about">About</Nav.Link>
-          </Nav>
+          <Navbar.Toggle />
 
-          <Nav>
-            {!user ? (
-              <>
-                <Button
-                  variant="outline-primary"
-                  className="me-2"
-                  onClick={() => navigate("/login")}
-                >
-                  Login
-                </Button>
-                <Button variant="success" onClick={() => navigate("/register")}>
-                  Register
-                </Button>
-              </>
-            ) : (
-              <>
-                <span className="me-3 mt-1 fw-semibold">
-                  Hello, {user.full_name}
-                </span>
-                <Button variant="outline-danger" onClick={() => {
-                  logout();
-                  navigate("/login");
-                }}>
-                  Logout
-                </Button>
-              </>
-            )}
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+          <Navbar.Collapse>
+            <Nav className="me-auto">
+              <Nav.Link as={Link} to="/jobs" style={{ color: "#fff", fontWeight: 600 }}>Jobs</Nav.Link>
+              <Nav.Link as={Link} to="/job-services" style={{ color: "#fff", fontWeight: 600 }}>Job Services</Nav.Link>
+              <Nav.Link as={Link} to="/about" style={{ color: "#fff", fontWeight: 600 }}>About</Nav.Link>
+            </Nav>
+
+            <Nav>
+              {!user ? (
+                <>
+                  <Button
+                    variant="outline-primary"
+                    className="me-2"
+                    onClick={() => {
+                      setAuthMode("login");
+                      setShowPopup(true);
+                    }}
+                  >
+                    Login
+                  </Button>
+
+                  <Button
+                    variant="success"
+                    onClick={() => {
+                      setAuthMode("signup");
+                      setShowPopup(true);
+                    }}
+                  >
+                    Register
+                  </Button>
+                </>
+              ) : (
+                <>
+                  {/* Changed text color to white with Bootstrap utility class text-white */}
+                  <span className="me-3 mt-1 fw-semibold text-white">
+                    Hello, {user.full_name}
+                  </span>
+
+                  <Button
+                    variant="outline-danger"
+                    // Added a custom class for CSS targeting
+                    className="logout-btn-custom"
+                    onClick={() => {
+                      logout();
+                      navigate("/");
+                    }}
+                  >
+                    Logout
+                  </Button>
+                </>
+              )}
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+
+      {/* AUTH POPUP */}
+      <AuthPopup
+        show={showPopup}
+        onClose={() => setShowPopup(false)}
+        mode={authMode}
+      />
+    </>
   );
 }

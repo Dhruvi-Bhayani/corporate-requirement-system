@@ -1,0 +1,29 @@
+/* Transparent glass background section */
+.stats-section {
+    background: rgba(255, 255, 255, 0.45);
+    /* ⭐ glass effect */
+    backdrop-filter: blur(5px);
+    /* optional smooth blur */
+    padding: 40px 0;
+    border-radius: 12px;
+}
+
+/* Card styling */
+.stats-card {
+    background: rgba(255, 255, 255, 0.6);
+    /* ⭐ transparent card */
+    border-radius: 12px;
+    padding: 20px 10px;
+    transition: 0.2s ease;
+}
+
+/* Hover effect */
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Icon size */
+.stats-icon {
+    font-size: 40px;
+}

@@ -30,6 +30,9 @@ export const User = sequelize.define('User', {
   otp_code: { type: DataTypes.STRING, allowNull: true },
   otp_expiry: { type: DataTypes.DATE, allowNull: true },
   is_verified: { type: DataTypes.BOOLEAN, defaultValue: false },
+  reset_otp: { type: DataTypes.STRING, allowNull: true },
+  reset_expiry: { type: DataTypes.DATE, allowNull: true },
+
 
   created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }
 }, {
