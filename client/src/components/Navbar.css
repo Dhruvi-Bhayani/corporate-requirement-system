@@ -1,46 +1,161 @@
-/* Prevent content from hiding behind navbar */
+/* No top gap */
 body {
-  padding-top: 95px !important;
-}/* ——— Strong navbar overrides — must load after Bootstrap ——— */
+  padding-top: 0 !important;
+}
+
+/* ================================
+   MAIN NAVBAR (TRANSPARENT + STICKY)
+================================ */
 .main-navbar {
-  background: #ffffff !important;
-  padding: 15px 0 !important;
-  min-height: 80px !important;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08) !important;
+  background: transparent !important;
+  padding: 14px 30px !important;
+  min-height: 75px !important;
+
+  position: fixed;        /* sticky */
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+
+  box-shadow: none !important;
+  transition: padding 0.3s ease, background 0.3s ease, backdrop-filter 0.3s ease;
 }
 
-/* Force logo size and prevent stretching */
-.main-navbar .navbar-brand img,
-.main-navbar .navbar-brand > img {
-  height: 55px !important;
-  width: auto !important;
-  object-fit: contain !important;
-  display: block !important;
+/* When page scrolls → shrink + blur + dark */
+.scrolled-navbar {
+  background: rgba(0, 0, 0, 0.65) !important;
+  backdrop-filter: blur(10px);
+  padding: 8px 30px !important;    /* navbar shrinks */
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25) !important;
 }
 
-/* FORCE link color — overrides Bootstrap */
+/* ================================
+   LOGO
+================================ */
+.navbar-logo-wrapper {
+  height: 55px;
+  width: 55px;
+  border-radius: 50%;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
+
+.navbar-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* ================================
+   NAV LINKS
+================================ */
 .main-navbar .nav-link {
-  color: #0b1226 !important;        /* <-- set the exact color you want (dark blue-ish) */
+  position: relative;        /* needed for underline animation */
+  color: #ffffff !important;
   font-weight: 600 !important;
   font-size: 1rem !important;
-  margin-right: 12px !important;
-  transition: color 0.18s ease !important;
+  transition: color 0.25s ease-in-out;
+  padding-bottom: 4px;
 }
 
 /* Hover + active */
 .main-navbar .nav-link:hover,
 .main-navbar .nav-link.active {
-  color: #0d6efd !important;        /* hover color (blue) */
+  color: #38c8ff !important;
 }
 
-/* Buttons */
+/* Underline animation */
+.main-navbar .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0%;
+  height: 2px;
+  background: #38c8ff;
+  transition: width 0.3s ease;
+}
+
+.main-navbar .nav-link:hover::after,
+.main-navbar .nav-link.active::after {
+  width: 100%;
+}
+
+/* Center spacing */
+.main-navbar .mx-auto {
+  gap: 22px !important;
+}
+
+/* ================================
+   BUTTONS
+================================ */
 .main-navbar .btn {
   font-weight: 600 !important;
   padding: 8px 20px !important;
   border-radius: 8px !important;
 }
 
-/* Mobile: ensure collapsed menu links keep color */
-.main-navbar .navbar-collapse .nav-link {
-  color: #0b1226 !important;
+/* Login */
+.btn-outline-primary {
+  color: #fff !important;
+  border-color: #fff !important;
+}
+
+.btn-outline-primary:hover {
+  background: #fff !important;
+  color: #000 !important;
+}
+
+/* Register */
+.btn-success {
+  background-color: #0a7099 !important;
+  border-color: #0a7099 !important;
+}
+
+.btn-success:hover {
+  background-color: #1A3D64 !important;
+}
+
+/* Logout */
+.logout-btn-custom {
+  background-color: #53629E !important;   /* Red Logout Button */
+  border-color: #53629E !important;
+  color: #fff !important;
+  font-weight: 600;
+  padding: 8px 22px !important;
+  border-radius: 8px !important;
+  transition: 0.25s ease;
+}
+
+.logout-btn-custom:hover {
+  background-color: #435663 !important;  /* Darker on hover */
+  border-color: #435663 !important;
+}
+
+
+/* ================================
+   MOBILE MENU SLIDE-DOWN ANIMATION
+================================ */
+@media (max-width: 992px) {
+  .navbar-collapse {
+    background: rgba(0, 0, 0, 0.95);
+    padding: 20px;
+    border-radius: 0 0 12px 12px;
+    animation: slideDown 0.35s ease forwards;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }

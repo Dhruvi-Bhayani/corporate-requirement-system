@@ -1,22 +1,31 @@
-/* White clean background box */
+/* ===============================
+   MAIN WRAPPER (Glass Card Look)
+================================ */
 .about-wrapper {
-    background: rgba(255, 255, 255, 0.5);
-    padding-top: 50px;
-    padding-bottom: 50px;
-    border-radius: 20px;
-    margin: 40px auto;
-    max-width: 1100px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    padding-top: 130px;        /* navbar height fix */
+    padding-bottom: 60px;
+
+    max-width: 1150px;
+    margin: 50px auto;
+
+    background: rgba(255, 255, 255, 0.55);
+    border-radius: 25px;
+
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(8px);
+
+    animation: fadeIn .5s ease-in-out;
 }
 
-/* Cards look cleaner */
-.about-card {
-    border-radius: 16px;
-    padding: 20px;
-    background: white !important;
+/* Smooth entry animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Better text visibility */
+/* ===============================
+   TYPOGRAPHY
+================================ */
 .about-wrapper h1,
 .about-wrapper h3,
 .about-wrapper p,
@@ -24,11 +33,87 @@
     color: #1a1a1a !important;
 }
 
-.about-wrapper p {
-    line-height: 1.6;
+.about-wrapper h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
 }
 
-/* Smooth images */
+.about-wrapper h3 {
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
+/* Better readability */
+.about-wrapper p {
+    line-height: 1.6;
+    font-size: 1.05rem;
+}
+
+/* ===============================
+   CARDS
+================================ */
+.about-card {
+    border-radius: 18px;
+    padding: 28px;
+    background: #ffffff !important;
+    border: none;
+
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.about-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+}
+
+/* ===============================
+   IMAGES
+================================ */
 .about-wrapper img {
-    border-radius: 16px;
+    border-radius: 18px;
+}
+
+/* ===============================
+   4-IMAGE FEATURE ROW
+================================ */
+.about-4-img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 18px;
+
+    box-shadow: 0 8px 28px rgba(0,0,0,0.28);
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.about-4-img:hover {
+    transform: scale(1.06);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.35);
+}
+
+/* ===============================
+   MOBILE RESPONSIVE FIXES
+================================ */
+@media (max-width: 991px) {
+    .about-wrapper {
+        margin: 20px;
+        padding-top: 150px;   /* bigger navbar on mobile */
+        border-radius: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .about-wrapper {
+        padding: 25px;
+        margin: 12px;
+    }
+
+    .about-4-img {
+        height: 120px;
+    }
+
+    .about-card {
+        padding: 20px;
+    }
 }

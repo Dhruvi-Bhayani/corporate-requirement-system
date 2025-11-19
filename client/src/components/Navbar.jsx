@@ -2,29 +2,54 @@ import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import AuthPopup from "../pages/Auth/AuthPopup";
+import "./Navbar.css";
+import { useEffect } from "react";
 
 export default function TopNavbar() {
   const { user, logout, showPopup, setShowPopup, authMode, setAuthMode } = useAuth();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const navbar = document.querySelector(".main-navbar");
+      if (window.scrollY > 10) {
+        navbar?.classList.add("scrolled-navbar");
+      } else {
+        navbar?.classList.remove("scrolled-navbar");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <>
       <Navbar expand="lg" className="main-navbar shadow-sm">
         <Container>
+
           {/* LOGO */}
-          <Navbar.Brand as={Link} to="/">
-            <img src="/logo1.png" alt="Logo" style={{ height: "50px" }} />
+          <Navbar.Brand>
+            <div className="navbar-logo-wrapper">
+              {/* ❗ FIX: Apply className="navbar-logo-img" */}
+              <img src="/logo1.png" className="navbar-logo-img" alt="Logo" />
+            </div>
           </Navbar.Brand>
 
           <Navbar.Toggle />
 
           <Navbar.Collapse>
-            <Nav className="me-auto">
-              <Nav.Link as={Link} to="/jobs" style={{ color: "#fff", fontWeight: 600 }}>Jobs</Nav.Link>
-              <Nav.Link as={Link} to="/job-services" style={{ color: "#fff", fontWeight: 600 }}>Job Services</Nav.Link>
-              <Nav.Link as={Link} to="/about" style={{ color: "#fff", fontWeight: 600 }}>About</Nav.Link>
+            {/* CENTER NAV LINKS */}
+            <Nav className="mx-auto gap-3">
+              <Nav.Link as={Link} to="/">Home</Nav.Link>
+              <Nav.Link as={Link} to="/about">About</Nav.Link>
+              <Nav.Link as={Link} to="/jobs">Jobs</Nav.Link>
+              <Nav.Link as={Link} to="/job-services">Job Services</Nav.Link>
+              <Nav.Link as={Link} to="/contact">Contact Us</Nav.Link>
+              <Nav.Link as={Link} to="/feedback">Feedback</Nav.Link>
             </Nav>
 
+            {/* RIGHT BUTTONS */}
             <Nav>
               {!user ? (
                 <>
@@ -51,14 +76,12 @@ export default function TopNavbar() {
                 </>
               ) : (
                 <>
-                  {/* Changed text color to white with Bootstrap utility class text-white */}
                   <span className="me-3 mt-1 fw-semibold text-white">
                     Hello, {user.full_name}
                   </span>
 
                   <Button
                     variant="outline-danger"
-                    // Added a custom class for CSS targeting
                     className="logout-btn-custom"
                     onClick={() => {
                       logout();
@@ -74,7 +97,7 @@ export default function TopNavbar() {
         </Container>
       </Navbar>
 
-      {/* AUTH POPUP */}
+      {/* POPUP */}
       <AuthPopup
         show={showPopup}
         onClose={() => setShowPopup(false)}

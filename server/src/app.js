@@ -8,7 +8,9 @@ import orgRoutes from "./routes/orgRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
 import statsRoutes from "./routes/statsRoutes.js";
-import userRoutes from './routes/userRoutes.js'; // <-- import user routes
+import userRoutes from './routes/userRoutes.js';
+import contactRoutes from "./routes/contactRoutes.js";
+import feedbackRoutes from "./routes/feedbackRoutes.js";
 
 // Import models
 import { User } from './models/User.js';
@@ -16,6 +18,8 @@ import { Organization } from './models/Organization.js';
 import { Job } from './models/Job.js';
 import { Profile } from './models/Profile.js';
 import { Application } from './models/Application.js';
+import { Contact } from './models/Contact.js';
+import { Feedback } from './models/Feedback.js';
 
 dotenv.config();
 
@@ -33,7 +37,8 @@ app.use('/api/users', userRoutes);
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 app.use("/api/stats", statsRoutes);
-
+app.use("/api/contact", contactRoutes);
+app.use("/api/feedback", feedbackRoutes);
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, async () => {

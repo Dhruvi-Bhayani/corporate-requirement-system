@@ -9,7 +9,9 @@
     animation: gradientShift 4s ease infinite;
     letter-spacing: 1px;
 }
-
+body {
+  padding-top: 90px !important;
+}
 @keyframes gradientShift {
     0% {
         background-position: 0%;
