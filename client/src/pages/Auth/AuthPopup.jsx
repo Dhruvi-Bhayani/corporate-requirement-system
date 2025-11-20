@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
+import ToastMessage from "../../components/ToastMessage";
 import "./AuthPopup.css";
 
 export default function AuthPopup({ show, onClose, mode = "login" }) {
@@ -20,12 +21,13 @@ export default function AuthPopup({ show, onClose, mode = "login" }) {
     });
 
     const [message, setMessage] = useState("");
+    const [showToast, setShowToast] = useState(false);  // ✅ toast visible
 
     useEffect(() => {
         setIsSignup(mode === "signup");
     }, [mode]);
 
-    // 🔥 CLEAR FORM WHEN POPUP OPENS
+    // CLEAR FORM WHEN POPUP OPENS
     useEffect(() => {
         if (show) {
             setForm({
@@ -50,15 +52,18 @@ export default function AuthPopup({ show, onClose, mode = "login" }) {
         const success = await login(form.email, form.password);
 
         if (success) {
-            onClose();       // ⭐ Close popup
-            navigate("/");   // ⭐ Redirect to home
+            setMessage("Login Successful!");
+            setShowToast(true);  // ✅ show toast
+
+            onClose();
+            navigate("/");
         } else {
             setMessage("Invalid email or password");
+            setShowToast(true);  // ❌ error toast
         }
     };
 
-
-    // SIGNUP (with OTP)
+    // SIGNUP (OTP)
     const handleSignup = async (e) => {
         e.preventDefault();
         setMessage("");
@@ -86,26 +91,34 @@ export default function AuthPopup({ show, onClose, mode = "login" }) {
             const res = await api.post(endpoint, payload);
 
             if (res.status === 200 || res.status === 201) {
-                setMessage("OTP sent to your email!");
+                const msg = "OTP sent to your email!";
+                setMessage(msg);
+                setShowToast(true);   // ✅ show toast
 
                 setTimeout(() => {
                     onClose();
                     navigate("/verify-otp");
-                }, 1000);
+                }, 800);
             }
         } catch (err) {
-            setMessage(
-                err.response?.data?.error || "Registration failed. Try again!"
-            );
+            const errMsg = err.response?.data?.error || "Registration failed!";
+            setMessage(errMsg);
+            setShowToast(true);  // ❌ error toast
         }
     };
 
     return (
         <>
+            {/* ✅ GLOBAL TOAST */}
+            <ToastMessage
+                message={message}
+                show={showToast}
+                onClose={() => setShowToast(false)}
+            />
+
             <div className={`auth-overlay ${show ? "show" : ""}`} onClick={onClose}></div>
 
             <div className={`auth-container ${show ? "show" : ""}`}>
-                <i className="uil uil-times close-btn" onClick={onClose}></i>
 
                 {/* LOGIN FORM */}
                 {!isSignup && (
@@ -141,11 +154,8 @@ export default function AuthPopup({ show, onClose, mode = "login" }) {
                             ></i>
                         </div>
 
-                        {message && <p className="error">{message}</p>}
-
                         <button className="button">Login Now</button>
 
-                        {/* ⭐ ADD FORGOT PASSWORD HERE ⭐ */}
                         <div className="login_signup" style={{ marginTop: "10px" }}>
                             <span
                                 className="forgot-link"
@@ -160,7 +170,19 @@ export default function AuthPopup({ show, onClose, mode = "login" }) {
 
                         <div className="login_signup">
                             Don’t have an account?{" "}
-                            <span onClick={() => setIsSignup(true)}>Signup</span>
+                            <span
+                                onClick={() => {
+                                    setIsSignup(true);
+                                    setForm({
+                                        fullName: "",
+                                        orgName: "",
+                                        email: "",
+                                        password: "",
+                                    });
+                                }}
+                            >
+                                Signup
+                            </span>
                         </div>
                     </form>
                 )}
@@ -174,7 +196,10 @@ export default function AuthPopup({ show, onClose, mode = "login" }) {
                             <button
                                 type="button"
                                 className={role === "jobSeeker" ? "active" : ""}
-                                onClick={() => setRole("jobSeeker")}
+                                onClick={() => {
+                                    setRole("jobSeeker");
+                                    setForm({ fullName: "", orgName: "", email: "", password: "" });
+                                }}
                             >
                                 Job Seeker
                             </button>
@@ -182,7 +207,10 @@ export default function AuthPopup({ show, onClose, mode = "login" }) {
                             <button
                                 type="button"
                                 className={role === "orgAdmin" ? "active" : ""}
-                                onClick={() => setRole("orgAdmin")}
+                                onClick={() => {
+                                    setRole("orgAdmin");
+                                    setForm({ fullName: "", orgName: "", email: "", password: "" });
+                                }}
                             >
                                 Organization
                             </button>
@@ -243,13 +271,18 @@ export default function AuthPopup({ show, onClose, mode = "login" }) {
                             ></i>
                         </div>
 
-                        {message && <p className="error">{message}</p>}
-
                         <button className="button">Signup Now</button>
 
                         <div className="login_signup">
                             Already have an account?{" "}
-                            <span onClick={() => setIsSignup(false)}>Login</span>
+                            <span
+                                onClick={() => {
+                                    setIsSignup(false);
+                                    setForm({ fullName: "", orgName: "", email: "", password: "" });
+                                }}
+                            >
+                                Login
+                            </span>
                         </div>
                     </form>
                 )}

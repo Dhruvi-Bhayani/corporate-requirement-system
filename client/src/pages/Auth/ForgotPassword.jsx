@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import { Form, Button, Card, Container } from "react-bootstrap";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
+import ToastMessage from "../../components/ToastMessage";
+import "./ForgotPassword.css";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+
+  const [showToast, setShowToast] = useState(false); // ⭐ Toast control
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -16,38 +21,54 @@ export default function ForgotPassword() {
 
     try {
       const res = await api.post("/auth/forgot-password", { email });
-      setMessage("OTP sent to your email!");
-      setTimeout(() => navigate("/verify-reset-otp?email=" + email), 1500);
+
+      const msg = "OTP sent to your email!";
+      setMessage(msg);
+      setShowToast(true); // ⭐ Show success toast
+
+      setTimeout(() => navigate("/verify-reset-otp?email=" + email), 1200);
     } catch (err) {
-      setError(err.response?.data?.error || "Email not found");
+      const errMsg = err.response?.data?.error || "Email not found";
+      setError(errMsg);
+      setMessage(errMsg);
+      setShowToast(true); // ❌ Show error toast
     }
   };
 
   return (
-    <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
-      <Card className="p-4 shadow" style={{ width: "400px" }}>
-        <h3 className="text-center mb-3">Forgot Password</h3>
+    <>
+      {/* ⭐ GLOBAL TOAST MESSAGE */}
+      <ToastMessage
+        message={message}
+        show={showToast}
+        onClose={() => setShowToast(false)}
+      />
 
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3">
-            <Form.Label>Email Address</Form.Label>
-            <Form.Control
-              type="email"
-              value={email}
-              placeholder="Enter your registered email"
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </Form.Group>
+      <div className="forgot-bg">
+        <Container className="d-flex justify-content-center align-items-center forgot-wrapper">
+          <Card className="forgot-card p-4">
+            <h3 className="text-center forgot-title">Forgot Password</h3>
 
-          {error && <p className="text-danger text-center">{error}</p>}
-          {message && <p className="text-success text-center">{message}</p>}
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3">
+                <Form.Label className="forgot-label">Email Address</Form.Label>
+                <Form.Control
+                  type="email"
+                  value={email}
+                  placeholder="Enter your registered email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="forgot-input"
+                  required
+                />
+              </Form.Group>
 
-          <Button className="w-100" type="submit" variant="primary">
-            Send OTP
-          </Button>
-        </Form>
-      </Card>
-    </Container>
+              <Button className="forgot-btn w-100" type="submit">
+                Send OTP
+              </Button>
+            </Form>
+          </Card>
+        </Container>
+      </div>
+    </>
   );
 }

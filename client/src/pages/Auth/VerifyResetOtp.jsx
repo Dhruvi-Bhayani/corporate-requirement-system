@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import { Card, Container, Button } from "react-bootstrap";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import api from "../../services/api";
+import ToastMessage from "../../components/ToastMessage";
+import "./VerifyResetOtp.css";
 
 export default function VerifyResetOtp() {
   const [otpDigits, setOtpDigits] = useState(["", "", "", "", "", ""]);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [showToast, setShowToast] = useState(false); // ⭐ toast flag
 
   const [params] = useSearchParams();
   const email = params.get("email");
@@ -26,52 +29,76 @@ export default function VerifyResetOtp() {
   };
 
   const handleVerify = async () => {
+    setError("");
+    setMessage("");
+
     const otp = otpDigits.join("");
 
     if (otp.length < 6) {
-      setError("Enter a valid 6-digit OTP");
+      const errMsg = "Enter a valid 6-digit OTP";
+      setError(errMsg);
+      setMessage(errMsg);
+      setShowToast(true);
       return;
     }
 
     try {
-      const res = await api.post("/auth/verify-reset-otp", { email, otp });
-      setMessage("OTP verified successfully!");
+      await api.post("/auth/verify-reset-otp", { email, otp });
+
+      const successMsg = "OTP verified successfully!";
+      setMessage(successMsg);
+      setShowToast(true);
 
       setTimeout(() => {
         navigate("/reset-password?email=" + email);
-      }, 1500);
+      }, 1200);
     } catch (err) {
-      setError(err.response?.data?.error || "Invalid OTP");
+      const errMsg = err.response?.data?.error || "Invalid OTP";
+      setError(errMsg);
+      setMessage(errMsg);
+      setShowToast(true);
     }
   };
 
   return (
-    <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
-      <Card className="p-4 shadow" style={{ width: "420px" }}>
-        <h3 className="text-center mb-3">Verify OTP</h3>
+    <>
+      {/* ⭐ Toast Message */}
+      <ToastMessage
+        message={message}
+        show={showToast}
+        onClose={() => setShowToast(false)}
+      />
 
-        <div className="d-flex justify-content-between">
-          {otpDigits.map((digit, index) => (
-            <input
-              key={index}
-              id={`otp-${index}`}
-              type="text"
-              className="form-control text-center"
-              style={{ width: "45px", fontSize: "24px" }}
-              maxLength={1}
-              value={digit}
-              onChange={(e) => handleChange(e.target.value, index)}
-            />
-          ))}
-        </div>
+      <div className="otp-bg">
+        <Container className="d-flex justify-content-center align-items-center otp-wrapper">
+          <Card className="otp-card p-4">
+            <h3 className="otp-title text-center mb-3">Verify OTP</h3>
 
-        {error && <p className="text-danger text-center mt-3">{error}</p>}
-        {message && <p className="text-success text-center mt-3">{message}</p>}
+            <div className="d-flex justify-content-between otp-box-wrapper">
+              {otpDigits.map((digit, index) => (
+                <input
+                  key={index}
+                  id={`otp-${index}`}
+                  type="text"
+                  className="otp-input text-center"
+                  maxLength={1}
+                  value={digit}
+                  onChange={(e) => handleChange(e.target.value, index)}
+                />
+              ))}
+            </div>
 
-        <Button className="w-100 mt-3" onClick={handleVerify}>
-          Verify OTP
-        </Button>
-      </Card>
-    </Container>
+            {error && <p className="text-danger text-center mt-3">{error}</p>}
+            {message && !error && (
+              <p className="text-success text-center mt-3">{message}</p>
+            )}
+
+            <Button className="otp-btn w-100 mt-3" onClick={handleVerify}>
+              Verify OTP
+            </Button>
+          </Card>
+        </Container>
+      </div>
+    </>
   );
 }
