@@ -16,10 +16,7 @@ export default function Disclaimer() {
     };
     return (
         <div className="policy-wrapper">
-            {/* Back button */}
-            <button className="back-btn" onClick={handleBack}>
-                <span className="arrow">←</span> Back
-            </button>
+
             <div className="policy-container">
                 <h1>Disclaimer</h1>
                 <p>
@@ -57,6 +54,11 @@ export default function Disclaimer() {
                     advice.
                 </p>
             </div>
+
+            {/* Back button */}
+            <button className="back-btn" onClick={handleBack}>
+                <span className="arrow">←</span> Back
+            </button>
         </div>
     );
 }

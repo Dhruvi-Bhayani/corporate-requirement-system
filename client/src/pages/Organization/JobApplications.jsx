@@ -24,7 +24,7 @@ export default function JobApplications() {
       setApplications(res.data);
     } catch (err) {
       console.error(err);
-      toast.error("Failed to load applications");   // ⭐ FIXED
+      toast.error("Failed to load applications");
     }
     setLoading(false);
   };
@@ -38,10 +38,10 @@ export default function JobApplications() {
       });
 
       fetchApplications();
-      toast.success("Status updated successfully");  // ⭐ FIXED
+      toast.success("Status updated successfully");
     } catch (err) {
       console.error(err);
-      toast.error("Failed to update status");        // ⭐ FIXED
+      toast.error("Failed to update status");
     }
   };
 
@@ -51,7 +51,7 @@ export default function JobApplications() {
   };
 
   const scheduleInterview = () => {
-    if (!interviewDate) return toast.error("Select interview date/time");  // ⭐ FIXED
+    if (!interviewDate) return toast.error("Select interview date/time");
 
     updateStatus(selectedApp.id, "interview_scheduled", {
       interview_at: interviewDate,
@@ -65,29 +65,29 @@ export default function JobApplications() {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4 text-primary">Applicants for this Job</h2>
+      <h2 className="mb-4 job-application-title">Applicants for this Job</h2>
 
-      {applications.length === 0 && (
-        <p>No applications yet.</p>
-      )}
+      {applications.length === 0 && <p>No applications yet.</p>}
 
       {applications.map((app) => (
-        <div key={app.id} className="p-3 mb-3 shadow-sm border rounded bg-white">
+        <div key={app.id} className="applicant-card">
 
           <h5>{app.User.full_name}</h5>
           <p>Email: {app.User.email}</p>
 
           <p>
             <strong>Status:</strong>{" "}
-            <span className="badge bg-info">{app.status}</span>
+            <span className="status-badge">{app.status}</span>
           </p>
 
           <p>
             <strong>Resume:</strong>{" "}
-            <a href={app.resume_url} target="_blank" rel="noreferrer">View Resume</a>
+            <a className="resume-link" href={app.resume_url} target="_blank" rel="noreferrer">
+              View Resume
+            </a>
           </p>
 
-          <div className="d-flex gap-2 mt-3">
+          <div className="d-flex gap-2 mt-3 applicant-actions">
             <Button variant="secondary" onClick={() => updateStatus(app.id, "screening")}>
               Screening
             </Button>
@@ -109,9 +109,11 @@ export default function JobApplications() {
             </Button>
           </div>
 
-          <div className="mt-3">
-            <strong>Status History:</strong>
-            {app.status_history && app.status_history.length > 0 ? (
+          {/* STATUS HISTORY */}
+          <p className="history-title mt-3">Status History:</p>
+
+          {app.status_history && app.status_history.length > 0 ? (
+            <div className="history-box">
               <ul className="mt-2">
                 {app.status_history.map((h, i) => (
                   <li key={i}>
@@ -124,21 +126,21 @@ export default function JobApplications() {
                   </li>
                 ))}
               </ul>
-            ) : (
-              <p>No history recorded.</p>
-            )}
-          </div>
+            </div>
+          ) : (
+            <p>No history recorded.</p>
+          )}
 
         </div>
       ))}
 
+      {/* INTERVIEW MODAL */}
       <Modal
         show={showInterviewModal}
         onHide={() => setShowInterviewModal(false)}
         centered
         className="interview-modal"
       >
-
         <Modal.Header closeButton>
           <Modal.Title>Schedule Interview</Modal.Title>
         </Modal.Header>
@@ -153,13 +155,13 @@ export default function JobApplications() {
             />
           </Form.Group>
 
-          <Form.Group className="mb-3">
+          <Form.Group>
             <Form.Label>Note (optional)</Form.Label>
             <Form.Control
               as="textarea"
               rows={3}
               value={note}
-              placeholder="Add any notes..."
+              placeholder="Add a note..."
               onChange={(e) => setNote(e.target.value)}
             />
           </Form.Group>
@@ -174,7 +176,6 @@ export default function JobApplications() {
             Save
           </Button>
         </Modal.Footer>
-
       </Modal>
 
     </div>

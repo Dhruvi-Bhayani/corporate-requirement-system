@@ -17,10 +17,7 @@ export default function TermsConditions() {
     };
     return (
         <div className="policy-wrapper">
-            {/* Back button */}
-            <button className="back-btn" onClick={handleBack}>
-                <span className="arrow">←</span> Back
-            </button>
+
             <div className="policy-container">
                 <h1>Terms & Conditions</h1>
                 <p>Last updated: {new Date().getFullYear()}</p>
@@ -66,6 +63,11 @@ export default function TermsConditions() {
                 <h3>7. Updates to Terms</h3>
                 <p>Terms may be updated. Continued use means you accept changes.</p>
             </div>
+
+             {/* Back button */}
+            <button className="back-btn" onClick={handleBack}>
+                <span className="arrow">←</span> Back
+            </button>
         </div>
     );
 }

@@ -18,12 +18,6 @@ export default function PrivacyPolicy() {
 
     return (
         <div className="policy-wrapper">
-
-            {/* Back button */}
-            <button className="back-btn" onClick={handleBack}>
-                <span className="arrow">←</span> Back
-            </button>
-
             <div className="policy-container">
                 <h1>Privacy Policy</h1>
                 <p>Last updated: {new Date().getFullYear()}</p>
@@ -77,6 +71,11 @@ export default function PrivacyPolicy() {
                 <h3>7. Contact Us</h3>
                 <p>If you have questions, contact support@careergrid.com.</p>
             </div>
+
+              {/* Back button */}
+            <button className="back-btn" onClick={handleBack}>
+                <span className="arrow">←</span> Back
+            </button>
         </div>
     );
 }

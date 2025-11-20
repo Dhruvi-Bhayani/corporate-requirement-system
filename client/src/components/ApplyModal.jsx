@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import api from "../services/api";
-import { toast } from "react-toastify";   // ⭐ ADD THIS
+import { toast } from "react-toastify";
 import "./ApplyModal.css";
 
 export default function ApplyModal({ show, onHide, jobId }) {
@@ -11,10 +11,15 @@ export default function ApplyModal({ show, onHide, jobId }) {
   const [loading, setLoading] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState("");
 
-  // ⭐ Upload Resume file
+  // ⭐ Upload Resume (PDF ONLY)
   const handleResumeUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    if (file.type !== "application/pdf") {
+      toast.error("Only PDF files allowed");
+      return;
+    }
 
     setUploading(true);
     setSelectedFileName(file.name);
@@ -30,7 +35,8 @@ export default function ApplyModal({ show, onHide, jobId }) {
       setResumeUrl(res.data.fileUrl);
       toast.success("Resume uploaded successfully!");
     } catch (err) {
-      toast.error("Upload failed. Only PDF/JPG/PNG allowed.");
+      console.error(err);
+      toast.error("PDF upload failed.");
     }
 
     setUploading(false);
@@ -67,7 +73,7 @@ export default function ApplyModal({ show, onHide, jobId }) {
     <Modal show={show} onHide={onHide} centered backdropClassName="modal-backdrop">
       <Form onSubmit={handleApply}>
         <div className="apply-glass-box">
-          
+
           {/* HEADER */}
           <div className="modal-header-custom">
             <h4>Apply for Job</h4>
@@ -87,17 +93,16 @@ export default function ApplyModal({ show, onHide, jobId }) {
             />
 
             {/* Resume Upload */}
-            <label className="form-label-custom mt-3">Upload Resume (PDF/JPG/PNG)</label>
+            <label className="form-label-custom mt-3">Upload Resume (PDF Only)</label>
 
             <input
               type="file"
-              accept=".pdf,.jpg,.jpeg,.png"
+              accept="application/pdf"
               className="input-box"
               onChange={handleResumeUpload}
             />
 
             {uploading && <p className="hint-text">Uploading...</p>}
-
             {selectedFileName && !uploading && (
               <p className="hint-text">✔ Uploaded: {selectedFileName}</p>
             )}
