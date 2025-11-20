@@ -1,0 +1,198 @@
+/* =========================================================
+   PREMIUM LIGHT + GLASS + ANIMATED APPLICATION CARDS (FINAL)
+   ========================================================= */
+
+/* === Shine Animation === */
+@keyframes shine {
+    from {
+        transform: translateX(-120%);
+    }
+    to {
+        transform: translateX(220%);
+    }
+}
+
+/* === Fade Up Entry === */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === SECTION === */
+.apps-section {
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.apps-heading {
+    text-align: center;
+    font-size: 36px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 35px;
+    text-shadow: 0px 0px 10px rgba(255,255,255,0.3);
+}
+
+/* === GRID === */
+.apps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+/* ==========================================================
+   PREMIUM GLASS CARD WITH SHINE + SHADOW + LIFT ANIMATION
+   ========================================================== */
+.app-card {
+    background: rgba(255, 255, 255, 0.25); /* transparent glass */
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+
+    border-radius: 20px;
+    padding: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+
+    box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.10),
+        0 8px 22px rgba(150, 180, 255, 0.22);
+
+    position: relative;
+    overflow: hidden;
+
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+
+    transition: transform .25s ease, box-shadow .25s ease, border .25s ease;
+}
+
+.app-card:hover {
+    transform: translateY(-10px);
+
+    box-shadow:
+        0 20px 45px rgba(0, 0, 0, 0.20),
+        0 12px 35px rgba(120, 160, 255, 0.30);
+
+    border: 1px solid rgba(80, 120, 255, 0.8);
+}
+
+/* === Shine Sweep Animation === */
+.app-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 70%;
+    height: 100%;
+    background: linear-gradient(
+        115deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.33) 50%,
+        transparent 100%
+    );
+    transform: skewX(-20deg);
+
+    animation: shine 2.4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+/* === CARD HEADER === */
+.job-title {
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    text-shadow: 0 3px 8px rgba(0,0,0,0.35);
+}
+
+.company {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+/* === CARD BODY === */
+.card-body .row {
+    display: flex;
+    margin: 10px 0;
+    font-size: 15px;
+    color: rgba(255,255,255,0.92);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.25);
+}
+
+.label {
+    width: 110px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.95);
+    text-shadow: 0 2px 5px rgba(0,0,0,0.25);
+}
+
+/* === FOOTER BADGES === */
+.card-footer {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.badge {
+    padding: 8px 14px;
+    border-radius: 25px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* === JOB STATUS BADGES === */
+.job-badge.open {
+    background: #d1f7da;
+    color: #1c9b52;
+    border: 1px solid #b1e8c1;
+}
+
+.job-badge.closed {
+    background: #ffd4d4;
+    color: #d94141;
+    border: 1px solid #ffb9b9;
+}
+
+/* === USER STATUS BADGES === */
+.user-badge.applied {
+    background: #d6e7ff;
+    color: #2a5bd7;
+    border: 1px solid #b7d4ff;
+}
+
+.user-badge.shortlisted {
+    background: #ffeebd;
+    color: #b47a0b;
+    border: 1px solid #ffdf8b;
+}
+
+.user-badge.other {
+    background: #e4e4e4;
+    color: #555;
+    border: 1px solid #d2d2d2;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 992px) {
+    .apps-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .apps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .label {
+        width: 95px;
+    }
+}

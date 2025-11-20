@@ -9,7 +9,7 @@ import CreateJob from "./pages/Jobs/CreateJob";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import VerifyOtp from "./pages/Auth/VerifyOtp";
-import OrgDashboard from "./pages/Org/OrgDashboard";
+import OrgDashboard from "./pages/Organization/OrgDashboard";
 import SeekerDashboard from "./pages/Seeker/SeekerDashboard";
 import Profile from "./pages/Profile";
 import SearchResults from "./pages/SearchResults";
@@ -24,6 +24,12 @@ import Footer from "./components/Footer";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsConditions from "./pages/TermsConditions";
 import Disclaimer from "./pages/Disclaimer";
+import JobApplications from "./pages/Organization/JobApplications";
+import EditJob from "./pages/Jobs/EditJob";
+
+// ⭐ ADD THESE LINES
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
   return (
@@ -91,6 +97,10 @@ export default function App() {
           <Route path="/terms" element={<TermsConditions />} />
           <Route path="/disclaimer" element={<Disclaimer />} />
 
+          <Route path="/org/job/:jobId/applications" element={<JobApplications />} />
+          <Route path="/jobs/edit/:id" element={<EditJob />} />
+          <Route path="/org/dashboard" element={<OrgDashboard />} />
+
           <Route
             path="/seeker"
             element={
@@ -103,6 +113,9 @@ export default function App() {
       </div>
 
       <Footer />
+
+      {/* ⭐ Toast Component (Globally Available) */}
+      <ToastContainer position="top-right" autoClose={2500} />
     </div>
   );
 }

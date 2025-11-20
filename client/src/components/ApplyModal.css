@@ -1,0 +1,118 @@
+/* 🔥 FULL SCREEN BACKDROP BLUR */
+.modal-backdrop.show {
+  background: rgba(0, 0, 0, 0.35) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+/* Remove Bootstrap default modal transparency */
+.modal-content {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ⭐ GLASS MODAL BOX */
+.apply-glass-box {
+  background: rgba(255, 255, 255, 0.20);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  
+  border-radius: 18px;
+  padding: 25px;
+  border: 1px solid rgba(255,255,255,0.35);
+
+  animation: fadeUp 0.3s ease;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+}
+
+/* Smooth fade animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* HEADER */
+.modal-header-custom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header-custom h4 {
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #333;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+
+/* BODY */
+.form-label-custom {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.input-box {
+  width: 100%;
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background: rgba(255, 255, 255, 0.85);
+  transition: 0.25s ease;
+}
+
+.input-box:focus {
+  border-color: #4ea5ff;
+  box-shadow: 0 0 8px rgba(78,165,255,0.4);
+}
+
+.hint-text {
+  font-size: 0.85rem;
+  color: #444;
+  margin-top: 4px;
+}
+
+/* FOOTER BUTTONS */
+.modal-footer-custom {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.cancel-btn {
+  background: #cfcfcf;
+  border: none;
+  padding: 8px 18px;
+  color: black;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+.cancel-btn:hover {
+  background: #b6b6b6;
+}
+
+.apply-btn {
+  border: none;
+  padding: 10px 25px;
+  font-weight: 600;
+  color: white;
+  border-radius: 8px;
+  background: linear-gradient(45deg, #007bff, #59c9ff);
+  transition: 0.3s ease;
+}
+
+.apply-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,110,255,0.4);
+}

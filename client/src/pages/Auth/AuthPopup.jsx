@@ -50,11 +50,13 @@ export default function AuthPopup({ show, onClose, mode = "login" }) {
         const success = await login(form.email, form.password);
 
         if (success) {
-            navigate("/");
+            onClose();       // ⭐ Close popup
+            navigate("/");   // ⭐ Redirect to home
         } else {
             setMessage("Invalid email or password");
         }
     };
+
 
     // SIGNUP (with OTP)
     const handleSignup = async (e) => {

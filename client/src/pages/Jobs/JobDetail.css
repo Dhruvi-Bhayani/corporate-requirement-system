@@ -28,6 +28,7 @@
   font-weight: 700;
   color: #ffffff;
   margin-bottom: 10px;
+  text-shadow: 0px 0px 10px rgba(255,255,255,0.3);
 }
 
 /* LOCATION + TYPE */
@@ -92,4 +93,118 @@
 .apply-btn:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 30px rgba(0,255,200,0.4);
+}
+
+/* =========================================
+   Blur + dim when modal opens
+   ========================================= */
+
+.job-detail-page.bg-blur {
+  position: relative;
+}
+
+.job-detail-page.bg-blur .job-detail-card,
+.job-detail-page.bg-blur .job-detail-card * {
+  transition: filter 0.32s ease, opacity 0.32s ease, transform 0.32s ease;
+  filter: blur(6px);
+  opacity: 0.45;
+  pointer-events: none;
+  user-select: none;
+}
+
+.modal.show {
+  z-index: 3000;
+}
+
+.modal-backdrop.show {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: rgba(0,0,0,0.32) !important;
+}
+
+/* BACK BUTTON */
+.job-back-btn {
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 8px 16px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 15px;
+
+  display: inline-block;
+  margin-bottom: 20px;
+  align-self: flex-start;
+  margin-left: 0 !important;
+}
+
+.job-back-btn:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  border: rgba(255, 255, 255, 0.25);
+}
+
+.job-detail-card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================
+   PREMIUM ACTION BUTTONS
+   ============================ */
+.job-action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 25px;
+  justify-content: center;
+}
+
+/* Base Premium Button Style */
+.job-action-btn {
+  padding: 10px 22px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  color: white;
+  font-size: 0.95rem;
+
+  background-size: 250% 250%;
+  transition: 0.35s ease;
+  animation: buttonGradientMove 5s ease infinite;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
+}
+
+/* Gradient animation */
+@keyframes buttonGradientMove {
+  0% { background-position: left top; }
+  50% { background-position: right bottom; }
+  100% { background-position: left top; }
+}
+
+/* Hover Effects */
+.job-action-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+  filter: brightness(1.15);
+}
+
+/* Click Effect */
+.job-action-btn:active {
+  transform: scale(0.97);
+}
+
+/* VIEW BUTTON — Blue Neon */
+.view-btn {
+  background: linear-gradient(135deg, #00a2ff, #007bff, #4dc8ff);
+}
+
+/* EDIT BUTTON — Gold Glow */
+.edit-btn {
+  background: linear-gradient(135deg, #ffb300, #ff9100, #ffcc40);
+}
+
+/* CLOSE BUTTON — Red Lava */
+.close-btn {
+  background: linear-gradient(135deg, #ff3b3b, #d62828, #ff6b6b);
 }

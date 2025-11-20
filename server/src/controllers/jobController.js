@@ -2,21 +2,18 @@
 import { Job } from "../models/Job.js";
 import { Op } from "sequelize";
 
+// --------------------- CREATE JOB ---------------------
 export const createJob = async (req, res) => {
   try {
     const { title, description, location, employment_type, salary_min, salary_max } = req.body;
-    const user = req.user; // from auth middleware
+    const user = req.user;
 
-    // ✅ Ensure only Org Admin / HR / Manager can create
     if (!["org_admin", "hr", "manager"].includes(user.role)) {
       return res.status(403).json({ error: "Only organization users can create jobs" });
     }
 
-    // ✅ Consistent organization ID
     const organizationId = user.organization_id || user.orgId;
-    if (!organizationId) {
-      return res.status(400).json({ error: "Missing organization ID" });
-    }
+    if (!organizationId) return res.status(400).json({ error: "Missing organization ID" });
 
     const job = await Job.create({
       title,
@@ -26,7 +23,8 @@ export const createJob = async (req, res) => {
       salary_min,
       salary_max,
       organization_id: organizationId,
-      created_by: user.id
+      created_by: user.id,
+      status: "open"
     });
 
     res.status(201).json({ message: "Job created successfully", job });
@@ -36,8 +34,7 @@ export const createJob = async (req, res) => {
   }
 };
 
-
-// Get single job details
+// --------------------- GET JOB DETAIL ---------------------
 export const getJobDetail = async (req, res) => {
   try {
     const { id } = req.params;
@@ -50,29 +47,34 @@ export const getJobDetail = async (req, res) => {
   }
 };
 
-// Update job
+// --------------------- UPDATE JOB ---------------------
 export const updateJob = async (req, res) => {
   try {
     const { id } = req.params;
     const user = req.user;
-    const job = await Job.findByPk(id);
 
+    const job = await Job.findByPk(id);
     if (!job) return res.status(404).json({ error: "Job not found" });
 
-    // Only creator or org_admin/HR/Manager can update
-    if (job.created_by !== user.id && !["org_admin", "hr", "manager"].includes(user.role)) {
-      return res.status(403).json({ error: "Not authorized to update this job" });
+    // ⭐ Only same organization can update
+    if (job.organization_id !== (user.organization_id || user.orgId)) {
+      return res.status(403).json({ error: "Not allowed to update this job" });
     }
 
-    const { title, description, location, employment_type, salary_min, salary_max, status } = req.body;
+    // Update fields
+    const fields = [
+      "title",
+      "description",
+      "location",
+      "employment_type",
+      "salary_min",
+      "salary_max",
+      "status"
+    ];
 
-    job.title = title ?? job.title;
-    job.description = description ?? job.description;
-    job.location = location ?? job.location;
-    job.employment_type = employment_type ?? job.employment_type;
-    job.salary_min = salary_min ?? job.salary_min;
-    job.salary_max = salary_max ?? job.salary_max;
-    job.status = status ?? job.status;
+    fields.forEach((f) => {
+      if (req.body[f] !== undefined) job[f] = req.body[f];
+    });
 
     await job.save();
     res.json({ message: "Job updated successfully", job });
@@ -81,38 +83,34 @@ export const updateJob = async (req, res) => {
   }
 };
 
-// Delete/close job
-export const deleteJob = async (req, res) => {
+// --------------------- CLOSE JOB (safe) ---------------------
+export const closeJob = async (req, res) => {
   try {
     const { id } = req.params;
     const user = req.user;
-    const job = await Job.findByPk(id);
 
+    const job = await Job.findByPk(id);
     if (!job) return res.status(404).json({ error: "Job not found" });
 
-    // Only creator or org_admin/HR/Manager can delete
-    if (job.created_by !== user.id && !["org_admin", "hr", "manager"].includes(user.role)) {
-      return res.status(403).json({ error: "Not authorized to delete this job" });
+    // ⭐ Only same organization allowed
+    if (job.organization_id !== (user.organization_id || user.orgId)) {
+      return res.status(403).json({ error: "Not allowed to close this job" });
     }
 
-    await job.destroy();
-    res.json({ message: "Job deleted successfully" });
+    job.status = "closed";
+    await job.save();
+
+    res.json({ message: "Job closed successfully", job });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Search jobs by title, description, or location
+// --------------------- SEARCH JOBS ---------------------
 export const searchJobs = async (req, res) => {
   try {
-    const q = req.query.q?.trim() || "";    // job title or keyword
-    const loc = req.query.loc?.trim() || ""; // location
-
-    // If both are empty, return all jobs
-    if (!q && !loc) {
-      const allJobs = await Job.findAll();
-      return res.json(allJobs);
-    }
+    const q = req.query.q?.trim() || "";
+    const loc = req.query.loc?.trim() || "";
 
     const conditions = [];
 
@@ -120,23 +118,21 @@ export const searchJobs = async (req, res) => {
       conditions.push({
         [Op.or]: [
           { title: { [Op.like]: `%${q}%` } },
-          { description: { [Op.like]: `%${q}%` } },
-        ],
+          { description: { [Op.like]: `%${q}%` } }
+        ]
       });
     }
 
     if (loc) {
-      conditions.push({
-        location: { [Op.like]: `%${loc}%` },
-      });
+      conditions.push({ location: { [Op.like]: `%${loc}%` } });
     }
 
-    const where = conditions.length ? { [Op.and]: conditions } : {};
+    const jobs = await Job.findAll({
+      where: conditions.length ? { [Op.and]: conditions } : {}
+    });
 
-    const jobs = await Job.findAll({ where });
     res.json(jobs);
   } catch (err) {
-    console.error("Search jobs error:", err);
     res.status(500).json({ error: err.message });
   }
 };

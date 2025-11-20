@@ -5,7 +5,7 @@ import api from "../../services/api";
 import { Button } from "react-bootstrap";
 import ApplyModal from "../../components/ApplyModal";
 import { useAuth } from "../../context/AuthContext";
-import "./JobDetail.css";   // ⭐ IMPORT CSS
+import "./JobDetail.css";
 
 export default function JobDetail() {
   const { id } = useParams();
@@ -29,31 +29,79 @@ export default function JobDetail() {
   }, [id]);
 
   const handleApplyClick = () => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
+    if (!user) return navigate("/login");
     setShowApply(true);
   };
+
+  const closeJob = async () => {
+    if (!window.confirm("Are you sure you want to close this job?")) return;
+
+    try {
+      await api.patch(`/jobs/${job.id}/close`);
+      alert("Job closed successfully!");
+      navigate("/org/dashboard");
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.error || "Failed to close job");
+    }
+  };
+
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="text-danger">{error}</p>;
 
   return (
     <>
-      <div className="job-detail-page">
+      <div className={`job-detail-page ${showApply ? "bg-blur" : ""}`}>
+
         <div className="job-detail-card">
 
-          <h2 className="job-title">{job.title}</h2>
 
-          <p className="job-meta">
+
+          <div className="d-flex gap-2 mt-3 mb-3">
+
+            {/* View Applicants */}
+            {(user?.role === "org_admin" || user?.role === "hr" || user?.role === "manager") && (
+              <button
+                className="btn btn-primary"
+                onClick={() => navigate(`/org/job/${job.id}/applications`)}
+              >
+                View Applicants
+              </button>
+            )}
+
+            {/* Edit Job */}
+            {(user?.role === "org_admin" || user?.role === "hr" || user?.role === "manager") && (
+              <button
+                className="btn btn-warning"
+                onClick={() => navigate(`/jobs/edit/${job.id}`)}
+              >
+                Edit Job
+              </button>
+            )}
+
+            {/* Close Job */}
+            {(user?.role === "org_admin" || user?.role === "hr" || user?.role === "manager") && (
+              <button
+                className="btn btn-danger"
+                onClick={closeJob}
+              >
+                Close Job
+              </button>
+            )}
+
+          </div>
+
+          {/* JOB TITLE */}
+          <h2 className="job-title mt-3">{job.title}</h2>
+
+          {/* META */}
+          <p className="job-meta mt-3">
             <span>{job.location}</span>
-
-            <span className="job-type-tag">
-              {job.employment_type}
-            </span>
+            <span className="job-type-tag">{job.employment_type}</span>
           </p>
 
+          {/* INFO */}
           <div className="job-info">
             <p><strong>Status:</strong> {job.status}</p>
             <p><strong>Salary:</strong> ₹{job.salary_min} - ₹{job.salary_max}</p>
@@ -62,14 +110,37 @@ export default function JobDetail() {
 
           <hr />
 
+          {/* DESCRIPTION */}
           <h4 className="desc-title">Job Description</h4>
           <p className="desc-text">{job.description}</p>
 
-          <div className="apply-box">
-            <Button className="apply-btn" onClick={handleApplyClick}>
-              Apply Now
-            </Button>
-          </div>
+          {/* APPLY BUTTON */}
+          {/* APPLY BUTTON — Only show if user is job_seeker AND job is open */}
+          {user?.role === "job_seeker" && job.status === "open" && (
+            <div className="apply-box">
+              <Button className="apply-btn" onClick={handleApplyClick}>
+                Apply Now
+              </Button>
+            </div>
+          )}
+
+          {/* If job is closed, hide apply button completely */}
+          {user?.role === "job_seeker" && job.status === "closed" && (
+            <div className="apply-box">
+              <button className="apply-btn" disabled style={{ opacity: 0.4, cursor: "not-allowed" }}>
+                Job Closed
+              </button>
+            </div>
+          )}
+
+          {/* Back to Jobs (Admins) */}
+          {["org_admin", "hr", "manager", "recruiter"].includes(user?.role) && (
+            <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+              <button className="job-back-btn" onClick={() => navigate("/jobs")}>
+                ← Back to Jobs
+              </button>
+            </div>
+          )}
 
         </div>
       </div>
@@ -81,4 +152,5 @@ export default function JobDetail() {
       />
     </>
   );
+
 }

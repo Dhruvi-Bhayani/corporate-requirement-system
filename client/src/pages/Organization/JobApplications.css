@@ -1,0 +1,68 @@
+/* FORCE DARK BACKDROP */
+.modal-backdrop.show {
+  background: rgba(0, 0, 0, 0.75) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+/* FINAL DARK NAVY GLASS MODAL */
+.interview-modal .modal-content {
+  background: rgba(5, 15, 35, 0.40) !important;  /* Slightly transparent navy */
+  background: linear-gradient(
+      135deg,
+      rgba(5, 15, 35, 0.88),
+      rgba(12, 28, 60, 0.82)
+  ) !important;
+
+  backdrop-filter: blur(20px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+
+  border-radius: 20px !important;
+  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+  padding: 25px !important;
+
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* TITLE */
+.interview-modal .modal-title {
+  color: #ffffff !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+}
+
+/* LABELS */
+.interview-modal label {
+  color: #dbe7ff !important;
+  font-weight: 600 !important;
+}
+
+/* INPUTS */
+.interview-modal input,
+.interview-modal textarea {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #fff !important;
+  border-radius: 12px !important;
+  padding: 12px !important;
+}
+
+.interview-modal input::placeholder,
+.interview-modal textarea::placeholder {
+  color: rgba(255, 255, 255, 0.55) !important;
+}
+
+/* BUTTONS */
+.interview-modal .btn-cancel {
+  background: rgba(255, 255, 255, 0.18) !important;
+  color: white !important;
+  padding: 10px 22px !important;
+  border-radius: 10px !important;
+}
+
+.interview-modal .btn-save {
+  background: linear-gradient(135deg, #2f6bff, #0044ff) !important;
+  color: white !important;
+  padding: 10px 25px !important;
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+}

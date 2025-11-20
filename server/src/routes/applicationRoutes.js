@@ -17,10 +17,22 @@ router.post("/", requireAuth, requireRole(["job_seeker"]), applyJob);
 router.get("/", requireAuth, requireRole(["job_seeker"]), getUserApplications);
 
 // HR/Manager updates status of applications
-router.put("/:appId/status", requireAuth, requireRole(["hr", "manager"]), updateApplicationStatus);
+router.put(
+  "/:appId/status",
+  requireAuth,
+  requireRole(["org_admin", "hr", "manager", "recruiter"]),
+  updateApplicationStatus
+);
+
 
 // HR/Manager: view all applications for a specific job
-router.get("/job/:jobId", requireAuth, requireRole(["hr", "manager"]), getJobApplications);
+router.get(
+  "/job/:jobId",
+  requireAuth,
+  requireRole(["org_admin", "hr", "manager", "recruiter"]),
+  getJobApplications
+);
+
 
 
 export default router;

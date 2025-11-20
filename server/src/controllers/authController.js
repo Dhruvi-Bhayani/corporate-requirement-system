@@ -188,12 +188,20 @@ export const login = async (req, res) => {
     if (!isMatch)
       return res.status(400).json({ error: "Invalid credentials" });
 
+    // JWT now includes correct key
     const token = jwt.sign(
-      { id: user.id, role: user.role, orgId: user.organization_id || null },
+      {
+        id: user.id,
+        email: user.email,
+        full_name: user.full_name,
+        role: user.role,
+        organization_id: user.organization_id || null
+      },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "1d" }
     );
 
+    // IMPORTANT FIX 🔥
     res.json({
       message: "Login successful",
       token,
@@ -202,7 +210,7 @@ export const login = async (req, res) => {
         email: user.email,
         role: user.role,
         full_name: user.full_name,
-        orgId: user.organization_id || null,
+        organization_id: user.organization_id || null, // <-- FIXED
       },
     });
 
@@ -210,6 +218,7 @@ export const login = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // 🔹 Forgot Password - Send OTP
 export const forgotPassword = async (req, res) => {
