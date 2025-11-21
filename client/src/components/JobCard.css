@@ -1,4 +1,4 @@
-/* GLASS CARD */
+/* GLASS CARD — EXACT SAME LOOK AS JOBS PAGE */
 .glass-job-card {
   background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(14px) saturate(140%);
@@ -16,6 +16,7 @@
   box-shadow: 0 12px 30px rgba(0,0,0,0.35);
 }
 
+/* SAME HOVER AS JOB LIST */
 .glass-job-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 18px 40px rgba(0,0,0,0.5);
@@ -29,14 +30,14 @@
 }
 
 .glass-job-title {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   color: white;
 }
 
 /* BADGE */
 .glass-job-badge {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.28);
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 13px;

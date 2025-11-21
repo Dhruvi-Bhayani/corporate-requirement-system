@@ -32,23 +32,19 @@ export default function SearchResults() {
     <div className="search-results-container">
 
       {/* Heading */}
-      <h2 className="search-heading">Search Results for “{q}”</h2>
+      <h2 className="search-heading">
+        Search Results for “{q}”
+      </h2>
 
-      {/* If loading */}
+      {/* Loading */}
       {loading ? (
         <p className="loading-text">Loading...</p>
       ) : jobs.length === 0 ? (
-        // ⭐ NO RESULTS GLASS CARD
+
+        /* ⭐ NO RESULTS CARD */
         <div className="no-results-box">
-
           <div className="no-results-glass">
-
-            <img
-              src="/nodatafound.png"
-              alt="No results"
-              className="no-results-img"
-            />
-
+            <img src="/nodatafound.png" alt="No results" className="no-results-img" />
             <h3 className="no-results-title">No jobs found</h3>
 
             <p className="no-results-text">
@@ -63,15 +59,17 @@ export default function SearchResults() {
             >
               ← Back to Jobs
             </button>
-
           </div>
-
         </div>
+
       ) : (
-        // ⭐ JOB GRID RESULTS
+
+        /* ⭐ FIXED GRID WITH WRAPPER (same look as Jobs page) */
         <div className="search-grid">
           {jobs.map((job) => (
-            <JobCard key={job.id} job={job} />
+            <div key={job.id} className="search-card-wrapper">
+              <JobCard job={job} />
+            </div>
           ))}
         </div>
       )}

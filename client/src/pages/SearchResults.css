@@ -24,14 +24,14 @@
    =========================================================== */
 .search-grid {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1180px;
   margin: auto;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   gap: 35px;
   justify-content: center;
-  align-items: start;
 }
+
 
 /* ===========================================================
    ⭐ NO RESULTS (Container)
@@ -105,6 +105,14 @@
   transform: translateY(-3px);
   filter: brightness(1.1);
 }
+
+/* Make each card expand full just like /jobs page */
+.search-card-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 
 /* ===========================================================
    ⭐ ANIMATION
