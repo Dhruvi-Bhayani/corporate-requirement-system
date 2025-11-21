@@ -1,3 +1,4 @@
+// src/pages/Jobs/JobList.jsx
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../../services/api";
@@ -21,27 +22,26 @@ export default function JobsList() {
 
   useEffect(() => {
     setLoading(true);
-    const endpoint =
-      searchTerm.trim()
-        ? `/jobs/search?q=${encodeURIComponent(searchTerm)}`
-        : "/jobs";
+
+    const endpoint = searchTerm.trim()
+      ? `/jobs/search?q=${encodeURIComponent(searchTerm)}`
+      : "/jobs";
 
     api
       .get(endpoint)
       .then((res) => {
         setJobs(Array.isArray(res.data) ? res.data : []);
-        setCurrentPage(1); // reset page when new search happens
+        setCurrentPage(1);
       })
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
   }, [searchTerm]);
 
   const role = user?.role?.trim();
+  const isOrgUser = ["org_admin", "hr", "manager", "recruiter"].includes(role);
   const canCreateJob = ["org_admin", "hr", "manager"].includes(role);
 
-  // -------------------------------
-  // ⭐ Pagination logic
-  // -------------------------------
+  // Pagination logic
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
   const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
@@ -52,9 +52,10 @@ export default function JobsList() {
 
   return (
     <div className="jobs-container container">
-
       <div className="header-row">
-        <h2 className="jobs-heading">Available Jobs</h2>
+        <h2 className="jobs-heading">
+          {isOrgUser ? "Your Posted Jobs" : "Available Jobs"}
+        </h2>
 
         {canCreateJob && (
           <Button
@@ -71,7 +72,6 @@ export default function JobsList() {
       <div className="jobs-grid">
         {currentJobs.map((job) => (
           <div key={job.id} className="job-card">
-
             <div className="job-card-content">
               <h4 className="job-title">{job.title}</h4>
               <p className="job-location">{job.location}</p>
@@ -87,12 +87,9 @@ export default function JobsList() {
         ))}
       </div>
 
-      {/* ------------------------------- */}
-      {/* ⭐ PAGINATION UI */}
-      {/* ------------------------------- */}
+      {/* Pagination */}
       {totalPages > 1 && (
         <div className="pagination-container">
-
           <button
             className="page-btn"
             disabled={currentPage === 1}
@@ -104,7 +101,9 @@ export default function JobsList() {
           {[...Array(totalPages)].map((_, i) => (
             <button
               key={i}
-              className={`page-number ${currentPage === i + 1 ? "active" : ""}`}
+              className={`page-number ${
+                currentPage === i + 1 ? "active" : ""
+              }`}
               onClick={() => setCurrentPage(i + 1)}
             >
               {i + 1}
@@ -118,10 +117,8 @@ export default function JobsList() {
           >
             Next ⟶
           </button>
-
         </div>
       )}
-
     </div>
   );
 }

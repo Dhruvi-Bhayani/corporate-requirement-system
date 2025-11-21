@@ -41,7 +41,22 @@ export const getJobDetail = async (req, res) => {
     const job = await Job.findByPk(id);
     if (!job) return res.status(404).json({ error: "Job not found" });
 
+    const user = req.user || null;
+
+    // ⭐ Guest + Job seeker → cannot view closed jobs
+    if ((!user || user.role === "job_seeker") && job.status !== "open") {
+      return res.status(403).json({ error: "This job is closed" });
+    }
+
+    // ⭐ Org users → can view only jobs from their organization
+    if (user && ["org_admin", "hr", "manager", "recruiter"].includes(user.role)) {
+      if (job.organization_id !== (user.organization_id || user.orgId)) {
+        return res.status(403).json({ error: "Not allowed to view this job" });
+      }
+    }
+
     res.json(job);
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -61,7 +76,6 @@ export const updateJob = async (req, res) => {
       return res.status(403).json({ error: "Not allowed to update this job" });
     }
 
-    // Update fields
     const fields = [
       "title",
       "description",
@@ -83,7 +97,7 @@ export const updateJob = async (req, res) => {
   }
 };
 
-// --------------------- CLOSE JOB (safe) ---------------------
+// --------------------- CLOSE JOB ---------------------
 export const closeJob = async (req, res) => {
   try {
     const { id } = req.params;
@@ -92,7 +106,6 @@ export const closeJob = async (req, res) => {
     const job = await Job.findByPk(id);
     if (!job) return res.status(404).json({ error: "Job not found" });
 
-    // ⭐ Only same organization allowed
     if (job.organization_id !== (user.organization_id || user.orgId)) {
       return res.status(403).json({ error: "Not allowed to close this job" });
     }
@@ -106,11 +119,38 @@ export const closeJob = async (req, res) => {
   }
 };
 
+// --------------------- REOPEN JOB ---------------------
+export const reopenJob = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = req.user;
+
+    const job = await Job.findByPk(id);
+    if (!job) return res.status(404).json({ error: "Job not found" });
+
+    if (job.organization_id !== (user.organization_id || user.orgId)) {
+      return res.status(403).json({ error: "Not allowed to reopen this job" });
+    }
+
+    if (job.status !== "closed") {
+      return res.status(400).json({ error: "Job is not closed" });
+    }
+
+    job.status = "open";
+    await job.save();
+
+    res.json({ message: "Job reopened successfully", job });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // --------------------- SEARCH JOBS ---------------------
 export const searchJobs = async (req, res) => {
   try {
     const q = req.query.q?.trim() || "";
     const loc = req.query.loc?.trim() || "";
+    const user = req.user || null;
 
     const conditions = [];
 
@@ -127,12 +167,49 @@ export const searchJobs = async (req, res) => {
       conditions.push({ location: { [Op.like]: `%${loc}%` } });
     }
 
-    const jobs = await Job.findAll({
-      where: conditions.length ? { [Op.and]: conditions } : {}
-    });
+    const filters = conditions.length ? { [Op.and]: conditions } : {};
 
+    // ⭐ Job seeker + Guest → show only open jobs
+    if (!user || user.role === "job_seeker") {
+      filters.status = "open";
+    }
+
+    // ⭐ Org users → only jobs created by their org
+    if (user && ["org_admin", "hr", "manager", "recruiter"].includes(user.role)) {
+      filters.organization_id = user.organization_id || user.orgId;
+    }
+
+    const jobs = await Job.findAll({ where: filters });
     res.json(jobs);
+
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+// --------------------- GET ALL JOBS ---------------------
+export const getAllJobs = async (req, res) => {
+  try {
+    const filters = {};
+
+    // Guest → Only open jobs
+    if (!req.user) {
+      filters.status = "open";
+    }
+
+    // Job seeker → Only open jobs
+    if (req.user?.role === "job_seeker") {
+      filters.status = "open";
+    }
+
+    // Org users → Only their created jobs
+    if (["org_admin", "hr", "manager", "recruiter"].includes(req.user?.role)) {
+      filters.created_by = req.user.id;
+    }
+
+    const jobs = await Job.findAll({ where: filters });
+    res.json(jobs);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch jobs" });
   }
 };
