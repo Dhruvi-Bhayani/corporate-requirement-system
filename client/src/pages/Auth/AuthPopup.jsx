@@ -21,13 +21,12 @@ export default function AuthPopup({ show, onClose, mode = "login" }) {
     });
 
     const [message, setMessage] = useState("");
-    const [showToast, setShowToast] = useState(false);  // ✅ toast visible
+    const [showToast, setShowToast] = useState(false);
 
     useEffect(() => {
         setIsSignup(mode === "signup");
     }, [mode]);
 
-    // CLEAR FORM WHEN POPUP OPENS
     useEffect(() => {
         if (show) {
             setForm({
@@ -44,7 +43,6 @@ export default function AuthPopup({ show, onClose, mode = "login" }) {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    // LOGIN
     const handleLogin = async (e) => {
         e.preventDefault();
         setMessage("");
@@ -53,17 +51,15 @@ export default function AuthPopup({ show, onClose, mode = "login" }) {
 
         if (success) {
             setMessage("Login Successful!");
-            setShowToast(true);  // ✅ show toast
-
+            setShowToast(true);
             onClose();
             navigate("/");
         } else {
             setMessage("Invalid email or password");
-            setShowToast(true);  // ❌ error toast
+            setShowToast(true);
         }
     };
 
-    // SIGNUP (OTP)
     const handleSignup = async (e) => {
         e.preventDefault();
         setMessage("");
@@ -93,7 +89,7 @@ export default function AuthPopup({ show, onClose, mode = "login" }) {
             if (res.status === 200 || res.status === 201) {
                 const msg = "OTP sent to your email!";
                 setMessage(msg);
-                setShowToast(true);   // ✅ show toast
+                setShowToast(true);
 
                 setTimeout(() => {
                     onClose();
@@ -103,24 +99,28 @@ export default function AuthPopup({ show, onClose, mode = "login" }) {
         } catch (err) {
             const errMsg = err.response?.data?.error || "Registration failed!";
             setMessage(errMsg);
-            setShowToast(true);  // ❌ error toast
+            setShowToast(true);
         }
     };
 
     return (
         <>
-            {/* ✅ GLOBAL TOAST */}
             <ToastMessage
                 message={message}
                 show={showToast}
                 onClose={() => setShowToast(false)}
             />
 
-            <div className={`auth-overlay ${show ? "show" : ""}`} onClick={onClose}></div>
+            <div
+                className={`auth-overlay ${show ? "show" : ""}`}
+                onClick={onClose}
+            ></div>
 
             <div className={`auth-container ${show ? "show" : ""}`}>
 
-                {/* LOGIN FORM */}
+                {/* ✅ CLOSE BUTTON */}
+                <div className="close-btn" onClick={onClose}>✕</div>
+
                 {!isSignup && (
                     <form onSubmit={handleLogin} className="auth-form">
                         <h2>Login</h2>
@@ -187,7 +187,6 @@ export default function AuthPopup({ show, onClose, mode = "login" }) {
                     </form>
                 )}
 
-                {/* SIGNUP FORM */}
                 {isSignup && (
                     <form onSubmit={handleSignup} className="auth-form">
                         <h2>Signup</h2>
@@ -198,7 +197,12 @@ export default function AuthPopup({ show, onClose, mode = "login" }) {
                                 className={role === "jobSeeker" ? "active" : ""}
                                 onClick={() => {
                                     setRole("jobSeeker");
-                                    setForm({ fullName: "", orgName: "", email: "", password: "" });
+                                    setForm({
+                                        fullName: "",
+                                        orgName: "",
+                                        email: "",
+                                        password: "",
+                                    });
                                 }}
                             >
                                 Job Seeker
@@ -209,7 +213,12 @@ export default function AuthPopup({ show, onClose, mode = "login" }) {
                                 className={role === "orgAdmin" ? "active" : ""}
                                 onClick={() => {
                                     setRole("orgAdmin");
-                                    setForm({ fullName: "", orgName: "", email: "", password: "" });
+                                    setForm({
+                                        fullName: "",
+                                        orgName: "",
+                                        email: "",
+                                        password: "",
+                                    });
                                 }}
                             >
                                 Organization
@@ -278,7 +287,12 @@ export default function AuthPopup({ show, onClose, mode = "login" }) {
                             <span
                                 onClick={() => {
                                     setIsSignup(false);
-                                    setForm({ fullName: "", orgName: "", email: "", password: "" });
+                                    setForm({
+                                        fullName: "",
+                                        orgName: "",
+                                        email: "",
+                                        password: "",
+                                    });
                                 }}
                             >
                                 Login

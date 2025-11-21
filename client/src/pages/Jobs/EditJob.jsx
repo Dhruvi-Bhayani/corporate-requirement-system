@@ -2,14 +2,14 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../../services/api";
-import ToastMessage from "../../components/ToastMessage"; // ✅ ADD THIS
+import ToastMessage from "../../components/ToastMessage";
 import "./EditJob.css";
 
 export default function EditJob() {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const [toast, setToast] = useState({ show: false, message: "" }); // ✅ TOAST STATE
+    const [toast, setToast] = useState({ show: false, message: "" });
 
     const [form, setForm] = useState({
         title: "",
@@ -32,10 +32,8 @@ export default function EditJob() {
         try {
             await api.put(`/jobs/${id}`, form);
 
-            // ✅ SHOW TOAST INSTEAD OF ALERT
             setToast({ show: true, message: "Job updated successfully!" });
 
-            // Small delay to show toast
             setTimeout(() => {
                 navigate(`/jobs/${id}`);
             }, 1200);
@@ -47,136 +45,110 @@ export default function EditJob() {
     };
 
     return (
-        <div className="container py-5">
-            <div className="row justify-content-center">
-                <div className="col-md-8">
+        <div className="editjob-wrapper">
 
-                    <div className="card shadow-lg border-0">
-                        <div className="card-header bg-primary text-white py-3">
-                            <h4 className="mb-0 text-center">Edit Job Details</h4>
+            <div className="editjob-card">
+
+                {/* ⭐ Floating round back button */}
+                <button className="editjob-back-btn" onClick={() => navigate(-1)}>
+                    <i className="uil uil-arrow-left"></i>
+                </button>
+
+                <div className="editjob-title">Edit Job Details</div>
+
+                <form onSubmit={handleUpdate}>
+
+                    {/* Job Title */}
+                    <label className="editjob-label">Job Title</label>
+                    <div className="input-icon-box">
+                        <i className="uil uil-edit"></i>
+                        <input
+                            type="text"
+                            className="editjob-input"
+                            value={form.title}
+                            onChange={(e) => setForm({ ...form, title: e.target.value })}
+                        />
+                    </div>
+
+                    {/* Location */}
+                    <label className="editjob-label">Location</label>
+                    <div className="input-icon-box">
+                        <i className="uil uil-map-marker"></i>
+                        <input
+                            type="text"
+                            className="editjob-input"
+                            value={form.location}
+                            onChange={(e) => setForm({ ...form, location: e.target.value })}
+                        />
+                    </div>
+
+                    {/* Employment Type */}
+                    <label className="editjob-label">Employment Type</label>
+                    <div className="input-icon-box">
+                        <i className="uil uil-briefcase"></i>
+                        <select
+                            className="editjob-input"
+                            value={form.employment_type}
+                            onChange={(e) => setForm({ ...form, employment_type: e.target.value })}
+                        >
+                            <option>Full-time</option>
+                            <option>Part-time</option>
+                            <option>Internship</option>
+                            <option>Contract</option>
+                        </select>
+                    </div>
+
+                    {/* Salary Row */}
+                    <div className="row-two">
+                        <div>
+                            <label className="editjob-label">Salary Min (₹)</label>
+                            <div className="input-icon-box">
+                                <i className="uil uil-rupee-sign"></i>
+                                <input
+                                    type="number"
+                                    className="editjob-input"
+                                    value={form.salary_min}
+                                    onChange={(e) => setForm({ ...form, salary_min: e.target.value })}
+                                />
+                            </div>
                         </div>
 
-                        <div className="card-body p-4">
-                            <form onSubmit={handleUpdate}>
-
-                                {/* Job Title */}
-                                <div className="mb-3">
-                                    <label className="form-label fw-semibold">Job Title</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        value={form.title}
-                                        onChange={(e) =>
-                                            setForm({ ...form, title: e.target.value })
-                                        }
-                                        required
-                                    />
-                                </div>
-
-                                {/* Location */}
-                                <div className="mb-3">
-                                    <label className="form-label fw-semibold">Location</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        value={form.location}
-                                        onChange={(e) =>
-                                            setForm({ ...form, location: e.target.value })
-                                        }
-                                    />
-                                </div>
-
-                                {/* Employment Type */}
-                                <div className="mb-3">
-                                    <label className="form-label fw-semibold">
-                                        Employment Type
-                                    </label>
-                                    <select
-                                        className="form-select"
-                                        value={form.employment_type}
-                                        onChange={(e) =>
-                                            setForm({
-                                                ...form,
-                                                employment_type: e.target.value,
-                                            })
-                                        }
-                                    >
-                                        <option>Full-time</option>
-                                        <option>Part-time</option>
-                                        <option>Internship</option>
-                                        <option>Contract</option>
-                                    </select>
-                                </div>
-
-                                {/* Salary Range */}
-                                <div className="row">
-                                    <div className="col-md-6 mb-3">
-                                        <label className="form-label fw-semibold">
-                                            Salary Min (₹)
-                                        </label>
-                                        <input
-                                            type="number"
-                                            className="form-control"
-                                            value={form.salary_min}
-                                            onChange={(e) =>
-                                                setForm({
-                                                    ...form,
-                                                    salary_min: e.target.value,
-                                                })
-                                            }
-                                        />
-                                    </div>
-
-                                    <div className="col-md-6 mb-3">
-                                        <label className="form-label fw-semibold">
-                                            Salary Max (₹)
-                                        </label>
-                                        <input
-                                            type="number"
-                                            className="form-control"
-                                            value={form.salary_max}
-                                            onChange={(e) =>
-                                                setForm({
-                                                    ...form,
-                                                    salary_max: e.target.value,
-                                                })
-                                            }
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Description */}
-                                <div className="mb-3">
-                                    <label className="form-label fw-semibold">
-                                        Description
-                                    </label>
-                                    <textarea
-                                        rows="3"
-                                        className="form-control"
-                                        value={form.description}
-                                        onChange={(e) =>
-                                            setForm({ ...form, description: e.target.value })
-                                        }
-                                    />
-                                </div>
-
-                                {/* Save Button */}
-                                <button type="submit" className="btn btn-primary w-100 py-2">
-                                    Save Changes
-                                </button>
-                            </form>
+                        <div>
+                            <label className="editjob-label">Salary Max (₹)</label>
+                            <div className="input-icon-box">
+                                <i className="uil uil-rupee-sign"></i>
+                                <input
+                                    type="number"
+                                    className="editjob-input"
+                                    value={form.salary_max}
+                                    onChange={(e) => setForm({ ...form, salary_max: e.target.value })}
+                                />
+                            </div>
                         </div>
                     </div>
 
-                </div>
+                    {/* Description */}
+                    <label className="editjob-label">Description</label>
+                    <textarea
+                        rows="3"
+                        className="editjob-input description-box"
+                        value={form.description}
+                        onChange={(e) => setForm({ ...form, description: e.target.value })}
+                    />
+
+                    {/* Save Button */}
+                    <button className="editjob-btn">Save Changes</button>
+
+                </form>
+
             </div>
 
-            {/* ✅ TOAST MESSAGE */}
             <ToastMessage
                 show={toast.show}
                 message={toast.message}
                 onClose={() => setToast({ show: false, message: "" })}
             />
+
         </div>
     );
 }

@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import "./Footer.css";
+import { useAuth } from "../context/AuthContext";   // ⭐ ADDED
 
 export default function Footer() {
+  const { user } = useAuth();   // ⭐ GET USER ROLE
+
   return (
     <footer className="footer">
       <div className="footer-container">
@@ -19,10 +22,15 @@ export default function Footer() {
         {/* QUICK LINKS */}
         <div className="footer-col">
           <h4>Quick Links</h4>
+
           <Link to="/">Home</Link>
           <Link to="/about">About</Link>
           <Link to="/jobs">Jobs</Link>
-          <Link to="/job-services">Job Services</Link>
+
+          {user?.role === "job_seeker" && (
+            <Link to="/job-services">My Jobs</Link>
+          )}
+
           <Link to="/contact">Contact Us</Link>
           <Link to="/feedback">Feedback</Link>
         </div>

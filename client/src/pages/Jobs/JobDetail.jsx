@@ -6,6 +6,7 @@ import { Button } from "react-bootstrap";
 import ApplyModal from "../../components/ApplyModal";
 import { useAuth } from "../../context/AuthContext";
 import "./JobDetail.css";
+import AuthPopup from "../Auth/AuthPopup";
 
 export default function JobDetail() {
   const { id } = useParams();
@@ -16,6 +17,7 @@ export default function JobDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showApply, setShowApply] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
     api
@@ -28,8 +30,12 @@ export default function JobDetail() {
       .finally(() => setLoading(false));
   }, [id]);
 
+  // APPLY BUTTON LOGIC
   const handleApplyClick = () => {
-    if (!user) return navigate("/login");
+    if (!user) {
+      setShowLogin(true);
+      return;
+    }
     setShowApply(true);
   };
 
@@ -46,7 +52,6 @@ export default function JobDetail() {
     }
   };
 
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="text-danger">{error}</p>;
 
@@ -56,11 +61,13 @@ export default function JobDetail() {
 
         <div className="job-detail-card">
 
-
+          {/* ⭐ GLASS BACK BUTTON FOR EVERYONE */}
+          <button className="job-back-btn" onClick={() => navigate(-1)}>
+            ← Back
+          </button>
 
           <div className="d-flex gap-2 mt-3 mb-3">
 
-            {/* View Applicants */}
             {(user?.role === "org_admin" || user?.role === "hr" || user?.role === "manager") && (
               <button
                 className="btn btn-primary"
@@ -70,7 +77,6 @@ export default function JobDetail() {
               </button>
             )}
 
-            {/* Edit Job */}
             {(user?.role === "org_admin" || user?.role === "hr" || user?.role === "manager") && (
               <button
                 className="btn btn-warning"
@@ -80,7 +86,6 @@ export default function JobDetail() {
               </button>
             )}
 
-            {/* Close Job */}
             {(user?.role === "org_admin" || user?.role === "hr" || user?.role === "manager") && (
               <button
                 className="btn btn-danger"
@@ -92,16 +97,13 @@ export default function JobDetail() {
 
           </div>
 
-          {/* JOB TITLE */}
           <h2 className="job-title mt-3">{job.title}</h2>
 
-          {/* META */}
           <p className="job-meta mt-3">
             <span>{job.location}</span>
             <span className="job-type-tag">{job.employment_type}</span>
           </p>
 
-          {/* INFO */}
           <div className="job-info">
             <p><strong>Status:</strong> {job.status}</p>
             <p><strong>Salary:</strong> ₹{job.salary_min} - ₹{job.salary_max}</p>
@@ -110,13 +112,11 @@ export default function JobDetail() {
 
           <hr />
 
-          {/* DESCRIPTION */}
           <h4 className="desc-title">Job Description</h4>
           <p className="desc-text">{job.description}</p>
 
-          {/* APPLY BUTTON */}
-          {/* APPLY BUTTON — Only show if user is job_seeker AND job is open */}
-          {user?.role === "job_seeker" && job.status === "open" && (
+          {/* ⭐ APPLY BUTTON — visible for everyone when job is open */}
+          {job.status === "open" && (
             <div className="apply-box">
               <Button className="apply-btn" onClick={handleApplyClick}>
                 Apply Now
@@ -124,20 +124,14 @@ export default function JobDetail() {
             </div>
           )}
 
-          {/* If job is closed, hide apply button completely */}
-          {user?.role === "job_seeker" && job.status === "closed" && (
+          {job.status === "closed" && (
             <div className="apply-box">
-              <button className="apply-btn" disabled style={{ opacity: 0.4, cursor: "not-allowed" }}>
+              <button
+                className="apply-btn"
+                disabled
+                style={{ opacity: 0.4, cursor: "not-allowed" }}
+              >
                 Job Closed
-              </button>
-            </div>
-          )}
-
-          {/* Back to Jobs (Admins) */}
-          {["org_admin", "hr", "manager", "recruiter"].includes(user?.role) && (
-            <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-              <button className="job-back-btn" onClick={() => navigate("/jobs")}>
-                ← Back to Jobs
               </button>
             </div>
           )}
@@ -150,7 +144,12 @@ export default function JobDetail() {
         onHide={() => setShowApply(false)}
         jobId={job.id}
       />
+
+      <AuthPopup
+        show={showLogin}
+        onClose={() => setShowLogin(false)}
+        mode="login"
+      />
     </>
   );
-
 }

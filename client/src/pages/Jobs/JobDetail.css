@@ -122,27 +122,27 @@
   background: rgba(0,0,0,0.32) !important;
 }
 
-/* BACK BUTTON */
+/* UNIVERSAL GLASS BACK BUTTON */
 .job-back-btn {
-  background-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.25);
-  padding: 8px 16px;
-  border-radius: 10px;
   color: white;
+  padding: 8px 18px;
+  border-radius: 10px;
   cursor: pointer;
   font-weight: 500;
   font-size: 15px;
-
-  display: inline-block;
+  transition: 0.25s ease;
+  width: fit-content;
   margin-bottom: 20px;
-  align-self: flex-start;
-  margin-left: 0 !important;
 }
 
 .job-back-btn:hover {
-  background-color: rgba(255, 255, 255, 0.25);
-  border: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.28);
+  transform: translateX(-4px);
 }
+
 
 .job-detail-card {
   display: flex;

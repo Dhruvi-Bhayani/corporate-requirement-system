@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import api from "../services/api";
 import JobCard from "../components/JobCard";
+import "./SearchResults.css";
 
 export default function SearchResults() {
   const [jobs, setJobs] = useState([]);
@@ -16,57 +17,65 @@ export default function SearchResults() {
   useEffect(() => {
     setLoading(true);
 
-    // Use backend search endpoint
     const endpoint = `/jobs/search?q=${encodeURIComponent(q)}&loc=${encodeURIComponent(loc)}`;
 
-    api.get(endpoint)
+    api
+      .get(endpoint)
       .then((res) => {
-        // backend returns an array
         setJobs(Array.isArray(res.data) ? res.data : []);
       })
-      .catch((err) => {
-        console.error("Search error:", err);
-        setJobs([]);
-      })
+      .catch(() => setJobs([]))
       .finally(() => setLoading(false));
   }, [q, loc]);
 
   return (
-  <div className="container mt-4">
+    <div className="search-results-container">
 
-    {jobs.length > 0 && (
-      <h2 className="mb-4">
-        Search Results for “{q}”
-      </h2>
-    )}
+      {/* Heading */}
+      <h2 className="search-heading">Search Results for “{q}”</h2>
 
-    {loading ? (
-      <p>Loading...</p>
-    ) : jobs.length === 0 ? (
-      <div className="text-center mt-5">
-        <img
-          src="/nodatafound.png"
-          alt="No results"
-          style={{ maxWidth: "300px", opacity: 0.85 }}
-        />
-        <p className="mt-3 text-muted fs-5">No jobs found.</p>
-        {/* 🔙 Back Button */}
-        <button
-          className="btn btn-outline-primary mb-3"
-          onClick={() => window.history.back()}
-        >
-          ← Back
-        </button>
-      </div>
-    ) : (
-      <div className="row mt-4">
-        {jobs.map((job) => (
-          <div className="col-md-4 mb-4" key={job.id}>
-            <JobCard job={job} />
+      {/* If loading */}
+      {loading ? (
+        <p className="loading-text">Loading...</p>
+      ) : jobs.length === 0 ? (
+        // ⭐ NO RESULTS GLASS CARD
+        <div className="no-results-box">
+
+          <div className="no-results-glass">
+
+            <img
+              src="/nodatafound.png"
+              alt="No results"
+              className="no-results-img"
+            />
+
+            <h3 className="no-results-title">No jobs found</h3>
+
+            <p className="no-results-text">
+              We couldn’t find any jobs that match your search term.
+              <br />
+              Try adjusting your keywords or filters.
+            </p>
+
+            <button
+              onClick={() => window.location.href = "/jobs"}
+              className="no-results-btn"
+            >
+              ← Back to Jobs
+            </button>
+
           </div>
-        ))}
-      </div>
-    )}
-  </div>
-);
+
+        </div>
+      ) : (
+        // ⭐ JOB GRID RESULTS
+        <div className="search-grid">
+          {jobs.map((job) => (
+            <JobCard key={job.id} job={job} />
+          ))}
+        </div>
+      )}
+
+    </div>
+  );
 }

@@ -23,7 +23,7 @@
   border-radius: 10px;
   background: rgba(255,255,255,0.18);
   border: 1px solid rgba(255,255,255,0.35);
-  color: rgb(20, 187, 42) !important;
+  color: #132440 !important;
 }
 
 .verifyotp-input::placeholder {

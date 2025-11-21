@@ -103,3 +103,39 @@
 .no-jobs {
   color: #eee;
 }
+
+/* Pagination Wrapper */
+.pagination-container {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Page Buttons */
+.page-btn, .page-number {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.25);
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.page-btn:hover,
+.page-number:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+.page-number.active {
+  background: #4da6ff;
+  color: #000;
+  font-weight: bold;
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import api from "../services/api";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import "./ApplyModal.css";
 
 export default function ApplyModal({ show, onHide, jobId }) {
@@ -10,6 +11,8 @@ export default function ApplyModal({ show, onHide, jobId }) {
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState("");
+
+  const navigate = useNavigate();
 
   // ⭐ Upload Resume (PDF ONLY)
   const handleResumeUpload = async (e) => {
@@ -62,6 +65,11 @@ export default function ApplyModal({ show, onHide, jobId }) {
 
       toast.success("Applied successfully!");
       onHide();
+
+      setTimeout(() => {
+        navigate("/job-services");
+      }, 800);
+
     } catch (err) {
       toast.error(err.response?.data?.error || "Application failed!");
     } finally {
@@ -74,15 +82,23 @@ export default function ApplyModal({ show, onHide, jobId }) {
       <Form onSubmit={handleApply}>
         <div className="apply-glass-box">
 
-          {/* HEADER */}
-          <div className="modal-header-custom">
-            <h4>Apply for Job</h4>
+          {/* ⭐ HEADER WITH TITLE */}
+          <div className="modal-header-custom modal-header-flex">
+            <h4
+              style={{
+                color: "white",
+                textAlign: "center",
+                width: "100%",
+                textShadow: "0px 0px 10px rgba(255,255,255,0.3)",
+              }}
+            >
+              Apply for Job
+            </h4>
           </div>
 
           {/* BODY */}
           <div className="modal-body">
 
-            {/* Cover Letter */}
             <label className="form-label-custom">Cover Letter</label>
             <textarea
               className="input-box"
@@ -92,7 +108,6 @@ export default function ApplyModal({ show, onHide, jobId }) {
               placeholder="Write your cover letter..."
             />
 
-            {/* Resume Upload */}
             <label className="form-label-custom mt-3">Upload Resume (PDF Only)</label>
 
             <input
@@ -119,6 +134,7 @@ export default function ApplyModal({ show, onHide, jobId }) {
               {loading ? "Applying..." : "Apply"}
             </Button>
           </div>
+
         </div>
       </Form>
     </Modal>

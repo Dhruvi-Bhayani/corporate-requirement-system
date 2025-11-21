@@ -61,21 +61,34 @@ body {
   transform: translate(-50%, -50%) scale(1);
 }
 
-/* Close Button */
+/* ======================================================
+   🔥 Close Button (Improved)
+   ====================================================== */
 .close-btn {
   position: absolute;
-  right: 18px;
   top: 12px;
-  font-size: 22px;
-  color: #333;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.08);
+  color: #222;
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  opacity: 0.7;
-  transition: 0.25s;
+  transition: 0.25s ease;
+  z-index: 20;
 }
 
 .close-btn:hover {
-  opacity: 1;
+  background: rgba(0,0,0,0.18);
+  transform: scale(1.1);
+  color: #ff2e2e;
 }
+
 
 /* ======================================================
    🔥 Form Title

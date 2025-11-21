@@ -31,7 +31,6 @@ export default function TopNavbar() {
           {/* LOGO */}
           <Navbar.Brand>
             <div className="navbar-logo-wrapper">
-              {/* ❗ FIX: Apply className="navbar-logo-img" */}
               <img src="/logo1.png" className="navbar-logo-img" alt="Logo" />
             </div>
           </Navbar.Brand>
@@ -44,7 +43,11 @@ export default function TopNavbar() {
               <Nav.Link as={Link} to="/">Home</Nav.Link>
               <Nav.Link as={Link} to="/about">About</Nav.Link>
               <Nav.Link as={Link} to="/jobs">Jobs</Nav.Link>
-              <Nav.Link as={Link} to="/job-services">Job Services</Nav.Link>
+
+              {user?.role === "job_seeker" && (
+                <Nav.Link as={Link} to="/job-services">My Jobs</Nav.Link>
+              )}
+
               <Nav.Link as={Link} to="/contact">Contact Us</Nav.Link>
               <Nav.Link as={Link} to="/feedback">Feedback</Nav.Link>
             </Nav>
