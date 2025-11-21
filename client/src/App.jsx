@@ -26,6 +26,7 @@ import TermsConditions from "./pages/TermsConditions";
 import Disclaimer from "./pages/Disclaimer";
 import JobApplications from "./pages/Organization/JobApplications";
 import EditJob from "./pages/Jobs/EditJob";
+import FeedbackView from "./pages/FeedbackView";
 
 // ⭐ ADD THESE LINES
 import { ToastContainer } from "react-toastify";
@@ -100,6 +101,8 @@ export default function App() {
           <Route path="/org/job/:jobId/applications" element={<JobApplications />} />
           <Route path="/jobs/edit/:id" element={<EditJob />} />
           <Route path="/org/dashboard" element={<OrgDashboard />} />
+
+          <Route path="/feedback-view" element={<FeedbackView />} />
 
           <Route
             path="/seeker"
