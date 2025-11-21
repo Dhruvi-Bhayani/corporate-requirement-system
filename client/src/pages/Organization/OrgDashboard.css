@@ -1,0 +1,115 @@
+.org-dashboard-page {
+  padding: 60px 0;
+  text-align: center;
+  min-height: 75vh;
+}
+
+.dashboard-heading {
+  font-size: 38px;
+  color: white;
+  font-weight: 800;
+  text-shadow: 0 0 15px rgba(255,255,255,0.5);
+  margin-bottom: 40px;
+}
+
+/* GRID LAYOUT */
+.dashboard-grid {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 35px;
+}
+
+/* Glass Card */
+.dashboard-job-card {
+  padding: 25px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 18px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 8px 35px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+}
+
+.dashboard-job-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+}
+
+/* Text */
+.job-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.job-location {
+  color: #cfe6ff;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+/* Status Pills */
+.job-status {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  text-transform: capitalize;
+}
+
+.status-open {
+  background: #2ecc71;
+  color: white;
+}
+
+.status-closed {
+  background: #e74c3c;
+  color: white;
+}
+
+/* Buttons */
+.dashboard-btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.view-btn,
+.edit-btn {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.view-btn {
+  background: #3498db;
+  color: white;
+}
+
+.view-btn:hover {
+  background: #2980b9;
+}
+
+.edit-btn {
+  background: #f1c40f;
+  color: black;
+}
+
+.edit-btn:hover {
+  background: #d4ac0d;
+}
+
+.no-jobs {
+  color: #bcd9ff;
+  font-size: 20px;
+}

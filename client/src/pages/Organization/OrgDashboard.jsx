@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
-import { Button, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import "./OrgDashboard.css";
 
 export default function OrgDashboard() {
   const { user } = useAuth();
@@ -12,7 +12,6 @@ export default function OrgDashboard() {
 
   const fetchJobs = async () => {
     try {
-      // ⭐ FIX — DO NOT USE orgId in query
       const res = await api.get("/jobs");
       setJobs(res.data);
     } catch (err) {
@@ -25,63 +24,53 @@ export default function OrgDashboard() {
   }, [user]);
 
   return (
-    <div className="container mt-4">
-      <h2>Your Organization Jobs</h2>
+    <div className="org-dashboard-page">
+      <h2 className="dashboard-heading">Your Organization Jobs</h2>
 
-      {jobs.length === 0 && <p className="mt-3">No jobs posted yet.</p>}
+      <div className="dashboard-grid">
+        {jobs.length === 0 && (
+          <p className="no-jobs">No jobs posted yet.</p>
+        )}
 
-      {jobs.length > 0 && (
-        <Table bordered hover className="mt-3">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Title</th>
-              <th>Location</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
+        {jobs.map((job) => (
+          <div key={job.id} className="dashboard-job-card">
 
-          <tbody>
-            {jobs.map((job) => (
-              <tr key={job.id}>
-                <td>{job.id}</td>
-                <td>{job.title}</td>
-                <td>{job.location}</td>
+            {/* Title */}
+            <h3 className="job-title">{job.title}</h3>
 
-                <td>
-                  {job.status === "closed" ? (
-                    <span className="badge bg-danger">Closed</span>
-                  ) : (
-                    <span className="badge bg-success">Open</span>
-                  )}
-                </td>
+            {/* Location */}
+            <p className="job-location">{job.location}</p>
 
-                <td>
-                  <Button
-                    size="sm"
-                    variant="primary"
-                    onClick={() => navigate(`/jobs/${job.id}`)}
-                    className="me-2"
-                  >
-                    View
-                  </Button>
+            {/* Status */}
+            <span
+              className={`job-status ${
+                job.status === "open" ? "status-open" : "status-closed"
+              }`}
+            >
+              {job.status}
+            </span>
 
-                  {job.status === "open" && (
-                    <Button
-                      size="sm"
-                      variant="warning"
-                      onClick={() => navigate(`/jobs/edit/${job.id}`)}
-                    >
-                      Edit
-                    </Button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      )}
+            {/* Action Buttons */}
+            <div className="dashboard-btn-group">
+              <button
+                className="view-btn"
+                onClick={() => navigate(`/jobs/${job.id}`)}
+              >
+                View
+              </button>
+
+              {job.status === "open" && (
+                <button
+                  className="edit-btn"
+                  onClick={() => navigate(`/jobs/edit/${job.id}`)}
+                >
+                  Edit
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
