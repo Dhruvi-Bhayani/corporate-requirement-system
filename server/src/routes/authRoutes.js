@@ -4,16 +4,22 @@ import {
   registerOrg,
   login,
   inviteUser,
-  acceptInvite, forgotPassword,
+  acceptInvite,
+  forgotPassword,
   verifyResetOtp,
-  resetPassword
+  resetPassword,
+  verifyOtp
 } from "../controllers/authController.js";
-import { verifyOtp } from "../controllers/authController.js";
+
+import { uploadOrgLogo } from "../middleware/uploadLogo.js";
 
 const router = express.Router();
 
 router.post("/register-jobseeker", registerJobSeeker);
-router.post("/register-org", registerOrg);
+
+// ⭐ Updated: Org register now supports logo upload + extra fields
+router.post("/register-org", uploadOrgLogo.single("logo"), registerOrg);
+
 router.post("/login", login);
 router.post("/invite", inviteUser);
 router.post("/accept-invite", acceptInvite);

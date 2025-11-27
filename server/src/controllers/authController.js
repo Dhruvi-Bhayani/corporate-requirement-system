@@ -93,15 +93,59 @@ export const verifyOtp = async (req, res) => {
   }
 };
 
+// 🔹 Register Organization Admin (with OTP + Org details + Logo)
 export const registerOrg = async (req, res) => {
   try {
-    const { org_name, email, password, full_name } = req.body;
+    const {
+      org_name,
+      email,
+      password,
+      full_name,
+      address,
+      website_url,
+      description,
+      contact_number
+    } = req.body;
 
+    // 1️⃣ Required field validation
+    if (!org_name || !email || !password || !full_name) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    // Validate Email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: "Invalid email format" });
+    }
+
+    // Check if email already exists
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ error: "This email is already registered" });
+    }
+
+    // 2️⃣ Create Organization Row
     const organization = await Organization.create({ name: org_name });
+
+    // 3️⃣ Hash Password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // 4️⃣ Generate OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
+    // 5️⃣ Format Website URL
+    let formattedWebsite = website_url || null;
+    if (formattedWebsite && !formattedWebsite.startsWith("http")) {
+      formattedWebsite = `https://${formattedWebsite}`;
+    }
+
+    // 6️⃣ Handle Logo File Upload
+    let logoPath = null;
+    if (req.file) {
+      logoPath = `/uploads/org/${req.file.filename}`;
+    }
+
+    // 7️⃣ Create Admin User of Organization
     const user = await User.create({
       email,
       password_hash: hashedPassword,
@@ -111,19 +155,39 @@ export const registerOrg = async (req, res) => {
       otp_code: otp,
       otp_expiry: new Date(Date.now() + 10 * 60 * 1000),
       is_verified: false,
+
+      // ⭐ NEW FIELDS
+      address: address || null,
+      website_url: formattedWebsite,
+      description: description || null,
+      contact_number: contact_number || null,
+      logo: logoPath,
     });
 
+    // 8️⃣ Send OTP Email
     await sendMail(
       email,
       "Your Organization Admin OTP Verification",
-      `<h1>Your OTP: ${otp}</h1>`
+      `
+      <h2>Hello ${full_name},</h2>
+      <p>Your OTP for verification is:</p>
+      <h1>${otp}</h1>
+      <p>This OTP is valid for 10 minutes.</p>
+      <hr/>
+      <p><b>Organization:</b> ${org_name}</p>
+      `
     );
 
-    res.json({ message: "OTP sent to your email", email });
+    // 9️⃣ Response
+    res.json({
+      message: "OTP sent to your email for verification",
+      email,
+      organization_id: organization.id
+    });
 
   } catch (err) {
     console.error("Register Org Error:", err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Something went wrong during registration." });
   }
 };
 

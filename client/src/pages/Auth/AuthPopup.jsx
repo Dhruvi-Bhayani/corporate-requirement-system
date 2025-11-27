@@ -6,301 +6,311 @@ import ToastMessage from "../../components/ToastMessage";
 import "./AuthPopup.css";
 
 export default function AuthPopup({ show, onClose, mode = "login" }) {
-    const { login } = useAuth();
-    const navigate = useNavigate();
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
-    const [isSignup, setIsSignup] = useState(mode === "signup");
-    const [showPassword, setShowPassword] = useState(false);
-    const [role, setRole] = useState("jobSeeker");
+  const [isSignup, setIsSignup] = useState(mode === "signup");
+  const [showPassword, setShowPassword] = useState(false);
+  const [role, setRole] = useState("jobSeeker");
 
-    const [form, setForm] = useState({
-        fullName: "",
-        orgName: "",
-        email: "",
-        password: "",
-    });
+  const emptyForm = {
+    fullName: "",
+    orgName: "",
+    email: "",
+    password: "",
+    address: "",
+    website: "",
+    contact: "",
+    description: "",
+  };
 
-    const [message, setMessage] = useState("");
-    const [showToast, setShowToast] = useState(false);
+  const [form, setForm] = useState(emptyForm);
 
-    useEffect(() => {
-        setIsSignup(mode === "signup");
-    }, [mode]);
+  const [message, setMessage] = useState("");
+  const [showToast, setShowToast] = useState(false);
 
-    useEffect(() => {
-        if (show) {
-            setForm({
-                fullName: "",
-                orgName: "",
-                email: "",
-                password: "",
-            });
-            setMessage("");
-        }
-    }, [show]);
+  /* ------------------------------------------
+        RESET FORM
+  ------------------------------------------- */
+  const resetForm = () => {
+    setForm(emptyForm);
+    setShowPassword(false);
+    setRole("jobSeeker");
+  };
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
+  /* ------------------------------------------
+        DISABLE SCROLL WHEN POPUP OPEN
+  ------------------------------------------- */
+  useEffect(() => {
+    if (show) document.body.classList.add("modal-open");
+    else document.body.classList.remove("modal-open");
+  }, [show]);
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        setMessage("");
+  /* ------------------------------------------
+       FIX 1: Correct form on Login/Register click
+  ------------------------------------------- */
+  useEffect(() => {
+    setIsSignup(mode === "signup");
+    resetForm();
+  }, [mode]);
 
-        const success = await login(form.email, form.password);
+  /* ------------------------------------------
+       FIX 2: Clear fields when switching JobSeeker <-> Organization
+  ------------------------------------------- */
+  useEffect(() => {
+    setForm(emptyForm);
+  }, [role]);
 
-        if (success) {
-            setMessage("Login Successful!");
-            setShowToast(true);
-            onClose();
-            navigate("/");
-        } else {
-            setMessage("Invalid email or password");
-            setShowToast(true);
-        }
-    };
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-    const handleSignup = async (e) => {
-        e.preventDefault();
-        setMessage("");
+  /* ------------------------------------------
+        LOGIN
+  ------------------------------------------- */
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const success = await login(form.email, form.password);
 
-        try {
-            let endpoint =
-                role === "jobSeeker"
-                    ? "/auth/register-jobseeker"
-                    : "/auth/register-org";
+    if (success) {
+      setShowToast(true);
+      onClose();
+      navigate("/");
+    } else {
+      setMessage("Invalid email or password");
+      setShowToast(true);
+    }
+  };
 
-            let payload =
-                role === "jobSeeker"
-                    ? {
-                        full_name: form.fullName,
-                        email: form.email,
-                        password: form.password,
-                    }
-                    : {
-                        org_name: form.orgName,
-                        full_name: form.fullName,
-                        email: form.email,
-                        password: form.password,
-                    };
+  /* ------------------------------------------
+        SIGNUP
+  ------------------------------------------- */
+  const handleSignup = async (e) => {
+    e.preventDefault();
 
-            const res = await api.post(endpoint, payload);
+    try {
+      const endpoint =
+        role === "jobSeeker"
+          ? "/auth/register-jobseeker"
+          : "/auth/register-org";
 
-            if (res.status === 200 || res.status === 201) {
-                const msg = "OTP sent to your email!";
-                setMessage(msg);
-                setShowToast(true);
-
-                setTimeout(() => {
-                    onClose();
-                    navigate("/verify-otp");
-                }, 800);
+      const payload =
+        role === "jobSeeker"
+          ? {
+              full_name: form.fullName,
+              email: form.email,
+              password: form.password,
             }
-        } catch (err) {
-            const errMsg = err.response?.data?.error || "Registration failed!";
-            setMessage(errMsg);
-            setShowToast(true);
-        }
-    };
+          : {
+              org_name: form.orgName,
+              full_name: form.fullName,
+              email: form.email,
+              password: form.password,
+              address: form.address,
+              website: form.website,
+              contact_number: form.contact,
+              description: form.description,
+            };
 
-    return (
-        <>
-            <ToastMessage
-                message={message}
-                show={showToast}
-                onClose={() => setShowToast(false)}
-            />
+      await api.post(endpoint, payload);
 
-            <div
-                className={`auth-overlay ${show ? "show" : ""}`}
-                onClick={onClose}
-            ></div>
+      setMessage("OTP sent to your email!");
+      setShowToast(true);
+      onClose();
+      navigate("/verify-otp");
+    } catch (err) {
+      setMessage(err.response?.data?.error || "Registration failed!");
+      setShowToast(true);
+    }
+  };
 
-            <div className={`auth-container ${show ? "show" : ""}`}>
+  return (
+    <>
+      <ToastMessage
+        message={message}
+        show={showToast}
+        onClose={() => setShowToast(false)}
+      />
 
-                {/* ✅ CLOSE BUTTON */}
-                <div className="close-btn" onClick={onClose}>✕</div>
+      {/* Overlay */}
+      <div
+        className={`auth-overlay ${show ? "show" : ""}`}
+        onClick={onClose}
+      ></div>
 
-                {!isSignup && (
-                    <form onSubmit={handleLogin} className="auth-form">
-                        <h2>Login</h2>
+      {/* Popup */}
+      <div className={`auth-container ${show ? "show" : ""}`}>
+        <div className="close-btn" onClick={onClose}>✕</div>
 
-                        <div className="input_box">
-                            <input
-                                name="email"
-                                type="email"
-                                placeholder="Enter your email"
-                                value={form.email}
-                                onChange={handleChange}
-                                required
-                            />
-                            <i className="uil uil-envelope-alt email"></i>
-                        </div>
+        <form
+          onSubmit={isSignup ? handleSignup : handleLogin}
+          className="auth-form"
+        >
+          <h2>{isSignup ? "Signup" : "Login"}</h2>
 
-                        <div className="input_box">
-                            <input
-                                name="password"
-                                type={showPassword ? "text" : "password"}
-                                placeholder="Enter password"
-                                value={form.password}
-                                onChange={handleChange}
-                                required
-                            />
-                            <i className="uil uil-lock password"></i>
+          {/* Role Switch */}
+          {isSignup && (
+            <div className="role-select">
+              <button
+                type="button"
+                className={role === "jobSeeker" ? "active" : ""}
+                onClick={() => setRole("jobSeeker")}
+              >
+                Job Seeker
+              </button>
 
-                            <i
-                                className={`uil ${showPassword ? "uil-eye" : "uil-eye-slash"} pw_hide`}
-                                onClick={() => setShowPassword(!showPassword)}
-                            ></i>
-                        </div>
-
-                        <button className="button">Login Now</button>
-
-                        <div className="login_signup" style={{ marginTop: "10px" }}>
-                            <span
-                                className="forgot-link"
-                                onClick={() => {
-                                    onClose();
-                                    navigate("/forgot-password");
-                                }}
-                            >
-                                Forgot Password?
-                            </span>
-                        </div>
-
-                        <div className="login_signup">
-                            Don’t have an account?{" "}
-                            <span
-                                onClick={() => {
-                                    setIsSignup(true);
-                                    setForm({
-                                        fullName: "",
-                                        orgName: "",
-                                        email: "",
-                                        password: "",
-                                    });
-                                }}
-                            >
-                                Signup
-                            </span>
-                        </div>
-                    </form>
-                )}
-
-                {isSignup && (
-                    <form onSubmit={handleSignup} className="auth-form">
-                        <h2>Signup</h2>
-
-                        <div className="role-select">
-                            <button
-                                type="button"
-                                className={role === "jobSeeker" ? "active" : ""}
-                                onClick={() => {
-                                    setRole("jobSeeker");
-                                    setForm({
-                                        fullName: "",
-                                        orgName: "",
-                                        email: "",
-                                        password: "",
-                                    });
-                                }}
-                            >
-                                Job Seeker
-                            </button>
-
-                            <button
-                                type="button"
-                                className={role === "orgAdmin" ? "active" : ""}
-                                onClick={() => {
-                                    setRole("orgAdmin");
-                                    setForm({
-                                        fullName: "",
-                                        orgName: "",
-                                        email: "",
-                                        password: "",
-                                    });
-                                }}
-                            >
-                                Organization
-                            </button>
-                        </div>
-
-                        {role === "orgAdmin" && (
-                            <div className="input_box">
-                                <input
-                                    name="orgName"
-                                    type="text"
-                                    placeholder="Organization Name"
-                                    value={form.orgName}
-                                    onChange={handleChange}
-                                    required
-                                />
-                                <i className="uil uil-building"></i>
-                            </div>
-                        )}
-
-                        <div className="input_box">
-                            <input
-                                name="fullName"
-                                type="text"
-                                placeholder="Full Name"
-                                value={form.fullName}
-                                onChange={handleChange}
-                                required
-                            />
-                            <i className="uil uil-user"></i>
-                        </div>
-
-                        <div className="input_box">
-                            <input
-                                name="email"
-                                type="email"
-                                placeholder="Enter email"
-                                value={form.email}
-                                onChange={handleChange}
-                                required
-                            />
-                            <i className="uil uil-envelope-alt"></i>
-                        </div>
-
-                        <div className="input_box">
-                            <input
-                                name="password"
-                                type={showPassword ? "text" : "password"}
-                                placeholder="Create password"
-                                value={form.password}
-                                onChange={handleChange}
-                                required
-                            />
-                            <i className="uil uil-lock"></i>
-
-                            <i
-                                className={`uil ${showPassword ? "uil-eye" : "uil-eye-slash"} pw_hide`}
-                                onClick={() => setShowPassword(!showPassword)}
-                            ></i>
-                        </div>
-
-                        <button className="button">Signup Now</button>
-
-                        <div className="login_signup">
-                            Already have an account?{" "}
-                            <span
-                                onClick={() => {
-                                    setIsSignup(false);
-                                    setForm({
-                                        fullName: "",
-                                        orgName: "",
-                                        email: "",
-                                        password: "",
-                                    });
-                                }}
-                            >
-                                Login
-                            </span>
-                        </div>
-                    </form>
-                )}
+              <button
+                type="button"
+                className={role === "orgAdmin" ? "active" : ""}
+                onClick={() => setRole("orgAdmin")}
+              >
+                Organization
+              </button>
             </div>
-        </>
-    );
+          )}
+
+          {/* Organization Fields */}
+          {isSignup && role === "orgAdmin" && (
+            <>
+              <div className="input_box">
+                <input
+                  name="orgName"
+                  type="text"
+                  placeholder="Organization Name"
+                  value={form.orgName}
+                  onChange={handleChange}
+                  required
+                />
+                <i className="uil uil-building"></i>
+              </div>
+
+              <div className="input_box">
+                <input
+                  name="address"
+                  type="text"
+                  placeholder="Address"
+                  value={form.address}
+                  onChange={handleChange}
+                  required
+                />
+                <i className="uil uil-location-point"></i>
+              </div>
+
+              <div className="input_box">
+                <input
+                  name="website"
+                  type="text"
+                  placeholder="Website URL"
+                  value={form.website}
+                  onChange={handleChange}
+                />
+                <i className="uil uil-globe"></i>
+              </div>
+
+              <div className="input_box">
+                <input
+                  name="contact"
+                  type="text"
+                  placeholder="Contact Number"
+                  value={form.contact}
+                  onChange={handleChange}
+                  required
+                />
+                <i className="uil uil-phone"></i>
+              </div>
+
+              <div className="input_box">
+                <textarea
+                  name="description"
+                  placeholder="Organization Description"
+                  value={form.description}
+                  onChange={handleChange}
+                ></textarea>
+              </div>
+            </>
+          )}
+
+          {/* Signup-only full name */}
+          {isSignup && (
+            <div className="input_box">
+              <input
+                name="fullName"
+                type="text"
+                placeholder="Full Name"
+                value={form.fullName}
+                onChange={handleChange}
+                required
+              />
+              <i className="uil uil-user"></i>
+            </div>
+          )}
+
+          {/* Email */}
+          <div className="input_box">
+            <input
+              name="email"
+              type="email"
+              placeholder="Email Address"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+            <i className="uil uil-envelope-alt"></i>
+          </div>
+
+          {/* Password */}
+          <div className="input_box">
+            <input
+              name="password"
+              type={showPassword ? "text" : "password"}
+              placeholder={isSignup ? "Create Password" : "Enter Password"}
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
+            <i className="uil uil-lock"></i>
+            <i
+              className={`uil ${showPassword ? "uil-eye" : "uil-eye-slash"} pw_hide`}
+              onClick={() => setShowPassword(!showPassword)}
+            ></i>
+          </div>
+
+          {/* Submit */}
+          <button className="button">
+            {isSignup ? "Signup Now" : "Login Now"}
+          </button>
+
+          {/* Switch link */}
+          <div className="login_signup">
+            {isSignup ? (
+              <>
+                Already have an account?{" "}
+                <span
+                  onClick={() => {
+                    setIsSignup(false);
+                    resetForm();
+                  }}
+                >
+                  Login
+                </span>
+              </>
+            ) : (
+              <>
+                Don’t have an account?{" "}
+                <span
+                  onClick={() => {
+                    setIsSignup(true);
+                    resetForm();
+                  }}
+                >
+                  Signup
+                </span>
+              </>
+            )}
+          </div>
+
+        </form>
+      </div>
+    </>
+  );
 }

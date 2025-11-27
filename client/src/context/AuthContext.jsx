@@ -12,7 +12,12 @@ export function AuthProvider({ children }) {
   const [showPopup, setShowPopup] = useState(false);
   const [authMode, setAuthMode] = useState("login"); // login | signup
 
-  // Load user & token from localStorage
+  // NEW ⭐ Reset popup (fix your issue)
+  const resetAuthPopup = () => {
+    setAuthMode("login");     // always go back to login form
+    setShowPopup(false);      // close popup
+  };
+
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     const savedToken = localStorage.getItem("token");
@@ -25,7 +30,6 @@ export function AuthProvider({ children }) {
     setAuthLoading(false);
   }, []);
 
-  // Login function
   const login = async (email, password) => {
     try {
       const res = await axios.post("http://localhost:3000/api/auth/login", {
@@ -48,7 +52,6 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // Logout
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -70,6 +73,9 @@ export function AuthProvider({ children }) {
         setShowPopup,
         authMode,
         setAuthMode,
+
+        // ⭐ NEW function
+        resetAuthPopup,
       }}
     >
       {!authLoading && children}
