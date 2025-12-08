@@ -1,0 +1,94 @@
+/* ===== ADMIN FEEDBACK PAGE (SIDEBAR SAFE) ===== */
+
+.admin-feedback-container {
+  padding: 40px;
+  min-height: 100vh;
+  color: white;
+
+  /* ✅ IMPORTANT: DO NOT TAKE FULL WIDTH */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.admin-feedback-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-align: left;     /* ✅ Better for admin UI */
+  letter-spacing: 1px;
+}
+
+/* ===== FEEDBACK GRID ===== */
+
+.feedback-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* ✅ slightly smaller */
+  gap: 30px;
+  max-width: 1000px;   /* ✅ reduced so it doesn’t touch sidebar */
+  margin: 0;           /* ✅ REMOVE center auto that breaks layout */
+}
+
+/* ===== FEEDBACK CARD ===== */
+
+.feedback-card-admin {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  border-left: 6px solid #ff9800;
+  transition: all 0.3s ease;
+}
+
+.feedback-card-admin:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6);
+}
+
+/* ===== STAR + RATING ===== */
+
+.feedback-rating {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  margin-bottom: 12px;
+  color: gold;
+  font-weight: 600;
+}
+
+/* ===== FEEDBACK MESSAGE ===== */
+
+.feedback-message-admin {
+  font-size: 17px;
+  color: #e0e0e0;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+/* ===== DELETE BUTTON ===== */
+
+.delete-btn-admin {
+  background: linear-gradient(135deg, #ff5252, #ff1744);
+  border: none;
+  color: white;
+  padding: 10px 22px;     /* ✅ slightly wider */
+  font-size: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.delete-btn-admin:hover {
+  background: linear-gradient(135deg, #d50000, #b71c1c);
+  transform: scale(1.05);
+}
+
+/* ===== EMPTY FEEDBACK ===== */
+
+.no-feedback {
+  font-size: 20px;
+  text-align: left;     /* ✅ matches admin layout */
+  margin-top: 50px;
+  color: #aaa;
+}

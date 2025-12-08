@@ -18,7 +18,7 @@ export const User = sequelize.define('User', {
   full_name: { type: DataTypes.STRING, allowNull: true },
 
   role: {
-    type: DataTypes.ENUM('org_admin', 'hr', 'manager', 'recruiter', 'job_seeker'),
+    type: DataTypes.ENUM('admin','org_admin', 'hr', 'manager', 'recruiter', 'job_seeker'),
     allowNull: false
   },
 
@@ -26,38 +26,17 @@ export const User = sequelize.define('User', {
 
   invite_token: { type: DataTypes.STRING(128), allowNull: true },
 
-  // ⭐ OTP FIELDS
   otp_code: { type: DataTypes.STRING, allowNull: true },
   otp_expiry: { type: DataTypes.DATE, allowNull: true },
   is_verified: { type: DataTypes.BOOLEAN, defaultValue: false },
   reset_otp: { type: DataTypes.STRING, allowNull: true },
   reset_expiry: { type: DataTypes.DATE, allowNull: true },
 
-  // ⭐ NEW ORG DETAILS (added here!)
-  address: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-
-  website_url: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-
-  logo: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-
-  description: {
-    type: DataTypes.TEXT,
-    allowNull: true
-  },
-
-  contact_number: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
+  address: { type: DataTypes.STRING, allowNull: true },
+  website_url: { type: DataTypes.STRING, allowNull: true },
+  logo: { type: DataTypes.STRING, allowNull: true },
+  description: { type: DataTypes.TEXT, allowNull: true },
+  contact_number: { type: DataTypes.STRING, allowNull: true },
 
   created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }
 }, {

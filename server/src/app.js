@@ -16,6 +16,9 @@ import userRoutes from "./routes/userRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
 import uploadRoutes from "./routes/uploadResume.js";
+import adminRoutes from "./routes/adminRoutes.js";
+import adminApplicationsRoutes from "./routes/adminApplicationsRoutes.js";
+import adminFeedbackRoutes from "./routes/adminFeedbackRoutes.js";
 
 dotenv.config();
 
@@ -44,6 +47,9 @@ app.use("/api/stats", statsRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/feedback", feedbackRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/admin/applications", adminApplicationsRoutes);
+app.use("/api/admin/feedback", adminFeedbackRoutes);
 
 // Health check
 app.get("/health", (req, res) => res.json({ status: "ok" }));

@@ -8,7 +8,8 @@ import {
   forgotPassword,
   verifyResetOtp,
   resetPassword,
-  verifyOtp
+  verifyOtp,
+  adminLogin
 } from "../controllers/authController.js";
 
 import { uploadOrgLogo } from "../middleware/uploadLogo.js";
@@ -27,5 +28,6 @@ router.post("/verify-otp", verifyOtp);
 router.post("/forgot-password", forgotPassword);
 router.post("/verify-reset-otp", verifyResetOtp);
 router.post("/reset-password", resetPassword);
+router.post("/admin/login", adminLogin);
 
 export default router;

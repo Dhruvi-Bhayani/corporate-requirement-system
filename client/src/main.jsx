@@ -1,17 +1,16 @@
 import React from "react";
-import { createRoot } from "react-dom/client";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./index.css";
-import App from "./App";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthContext.jsx";
+import { AdminAuthProvider } from "./admin/AdminAuthContext.jsx";
 
-createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <AuthProvider>
-      <BrowserRouter>
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <BrowserRouter>
+    <AdminAuthProvider>
+      <AuthProvider>
         <App />
-      </BrowserRouter>
-    </AuthProvider>
-  </React.StrictMode>
+      </AuthProvider>
+    </AdminAuthProvider>
+  </BrowserRouter>
 );

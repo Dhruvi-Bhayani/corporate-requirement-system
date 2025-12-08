@@ -359,3 +359,58 @@ export const resetPassword = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// ---------------------------------------------------------------
+// 🔹 ADMIN LOGIN (NEW CODE ADDED BELOW YOUR EXISTING FUNCTIONS)
+// ---------------------------------------------------------------
+
+export const adminLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // 1️⃣ Find admin by email + role
+    const admin = await User.findOne({
+      where: {
+        email,
+        role: "admin"  // only admin user can login
+      }
+    });
+
+    if (!admin) {
+      return res.status(404).json({ error: "Admin not found" });
+    }
+
+    // 2️⃣ Validate password
+    const isValid = await bcrypt.compare(password, admin.password_hash);
+    if (!isValid) {
+      return res.status(401).json({ error: "Incorrect password" });
+    }
+
+    // 3️⃣ Create Admin JWT
+    const token = jwt.sign(
+      {
+        id: admin.id,
+        email: admin.email,
+        role: "admin"
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    // 4️⃣ Response
+    res.json({
+      message: "Admin login successful!",
+      token,
+      admin: {
+        id: admin.id,
+        email: admin.email,
+        full_name: admin.full_name,
+        role: admin.role
+      }
+    });
+
+  } catch (err) {
+    console.error("Admin Login Error:", err);
+    res.status(500).json({ error: "Something went wrong during admin login" });
+  }
+};

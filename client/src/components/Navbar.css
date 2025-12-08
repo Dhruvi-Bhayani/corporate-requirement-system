@@ -4,57 +4,50 @@ body {
 }
 
 /* ================================
-   MAIN NAVBAR (TRANSPARENT + STICKY)
+   MAIN NAVBAR
 ================================ */
 .main-navbar {
   background: transparent !important;
   padding: 14px 30px !important;
   min-height: 75px !important;
 
-  position: fixed;        /* sticky */
+  position: fixed;
   top: 0;
   width: 100%;
   z-index: 1000;
-
   box-shadow: none !important;
-  transition: padding 0.3s ease, background 0.3s ease, backdrop-filter 0.3s ease;
+
+  transition: padding 0.3s ease, background 0.3s ease,
+    backdrop-filter 0.3s ease;
 }
 
-/* When page scrolls → shrink + blur + dark */
 .scrolled-navbar {
   background: rgba(0, 0, 0, 0.65) !important;
   backdrop-filter: blur(10px);
-  padding: 8px 30px !important;    /* navbar shrinks */
-  box-shadow: 0 4px 20px rgba(0,0,0,0.25) !important;
+  padding: 8px 30px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
 }
 
-/* ================================
-   LOGO
-================================ */
+/* LOGO */
 .navbar-logo-wrapper {
   height: 55px;
   width: 55px;
   border-radius: 50%;
   overflow: hidden;
-
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: default;
 }
 
 .navbar-logo-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  pointer-events: none;
 }
 
-/* ================================
-   NAV LINKS
-================================ */
+/* NAV LINKS */
 .main-navbar .nav-link {
-  position: relative;        /* needed for underline animation */
+  position: relative;
   color: #ffffff !important;
   font-weight: 600 !important;
   font-size: 1rem !important;
@@ -62,13 +55,11 @@ body {
   padding-bottom: 4px;
 }
 
-/* Hover + active */
 .main-navbar .nav-link:hover,
 .main-navbar .nav-link.active {
   color: #38c8ff !important;
 }
 
-/* Underline animation */
 .main-navbar .nav-link::after {
   content: "";
   position: absolute;
@@ -85,21 +76,17 @@ body {
   width: 100%;
 }
 
-/* Center spacing */
 .main-navbar .mx-auto {
   gap: 22px !important;
 }
 
-/* ================================
-   BUTTONS
-================================ */
+/* BUTTONS */
 .main-navbar .btn {
   font-weight: 600 !important;
   padding: 8px 20px !important;
   border-radius: 8px !important;
 }
 
-/* Login */
 .btn-outline-primary {
   color: #fff !important;
   border-color: #fff !important;
@@ -110,36 +97,68 @@ body {
   color: #000 !important;
 }
 
-/* Register */
 .btn-success {
   background-color: #0a7099 !important;
   border-color: #0a7099 !important;
 }
 
 .btn-success:hover {
-  background-color: #1A3D64 !important;
+  background-color: #1a3d64 !important;
 }
-
-/* Logout */
-.logout-btn-custom {
-  background-color: #53629E !important;   /* Red Logout Button */
-  border-color: #53629E !important;
-  color: #fff !important;
-  font-weight: 600;
-  padding: 8px 22px !important;
-  border-radius: 8px !important;
-  transition: 0.25s ease;
-}
-
-.logout-btn-custom:hover {
-  background-color: #435663 !important;  /* Darker on hover */
-  border-color: #435663 !important;
-}
-
 
 /* ================================
-   MOBILE MENU SLIDE-DOWN ANIMATION
+   USER DROPDOWN
 ================================ */
+.user-dropdown {
+  position: relative;
+  cursor: pointer;
+}
+
+.user-name {
+  color: white;
+  font-weight: 600;
+}
+
+.dropdown-menu-user {
+  position: absolute;
+  right: 0;
+  top: 35px;
+  background: white;
+  color: #333;
+  padding: 10px 0;
+  width: 160px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  z-index: 200;
+  animation: fadeScale 0.2s ease;
+}
+
+.dropdown-menu-user p {
+  padding: 10px 15px;
+  margin: 0;
+  font-size: 14px;
+}
+
+.dropdown-menu-user p:hover {
+  background: #f0f0f0;
+}
+
+.logout-option {
+  color: red;
+}
+
+@keyframes fadeScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* MOBILE MENU */
 @media (max-width: 992px) {
   .navbar-collapse {
     background: rgba(0, 0, 0, 0.95);

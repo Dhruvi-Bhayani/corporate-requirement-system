@@ -1,0 +1,98 @@
+/* MAIN LAYOUT */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background-size: cover;
+}
+
+/* CONTENT AREA */
+.admin-content {
+  margin-left: 260px;
+  padding: 40px;
+  width: 100%;
+}
+
+/* TITLES */
+.admin-title {
+  font-size: 36px;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 0 12px rgba(255,255,255,0.4);
+}
+
+.admin-subtitle {
+  margin-top: 5px;
+  margin-bottom: 30px;
+  color: #d0d0d0;
+  font-size: 16px;
+}
+
+/* STAT CARDS GRID */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+/* GLASS CARD STYLE */
+.stat-card {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 25px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+}
+
+/* ICON INSIDE CARDS */
+.stat-icon {
+  font-size: 45px;
+  margin-bottom: 12px;
+}
+
+/* NUMBERS */
+.stat-number {
+  font-size: 40px;
+  font-weight: 800;
+}
+
+/* QUICK NAVIGATION SECTION */
+.section-title {
+  color: white;
+  margin-top: 40px;
+  margin-bottom: 15px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* QUICK LINKS */
+.quick-links {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.quick-link {
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(8px);
+  padding: 18px 22px;
+  border-radius: 12px;
+  font-size: 17px;
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  border-left: 6px solid;
+  transition: 0.3s;
+}
+
+.quick-link:hover {
+  transform: translateX(8px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}

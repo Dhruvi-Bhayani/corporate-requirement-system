@@ -60,3 +60,31 @@ export const getLatestFeedback = async (req, res) => {
   }
 };
 
+export const deleteFeedback = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deleted = await Feedback.destroy({
+      where: { id },
+    });
+
+    if (!deleted) {
+      return res.status(404).json({
+        success: false,
+        message: "Feedback not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Feedback deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete feedback error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+

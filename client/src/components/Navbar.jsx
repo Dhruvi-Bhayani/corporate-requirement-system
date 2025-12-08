@@ -3,11 +3,25 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import AuthPopup from "../pages/Auth/AuthPopup";
 import "./Navbar.css";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export default function TopNavbar() {
-  const { user, logout, showPopup, setShowPopup, authMode, setAuthMode } = useAuth();
+  const { user, logout, showPopup, setShowPopup, authMode, setAuthMode } =
+    useAuth();
   const navigate = useNavigate();
+
+  const [showMenu, setShowMenu] = useState(false);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest(".user-dropdown")) {
+        setShowMenu(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,7 +41,6 @@ export default function TopNavbar() {
     <>
       <Navbar expand="lg" className="main-navbar shadow-sm">
         <Container>
-
           {/* LOGO */}
           <Navbar.Brand>
             <div className="navbar-logo-wrapper">
@@ -40,19 +53,31 @@ export default function TopNavbar() {
           <Navbar.Collapse>
             {/* CENTER NAV LINKS */}
             <Nav className="mx-auto gap-3">
-              <Nav.Link as={Link} to="/">Home</Nav.Link>
-              <Nav.Link as={Link} to="/about">About</Nav.Link>
-              <Nav.Link as={Link} to="/jobs">Jobs</Nav.Link>
+              <Nav.Link as={Link} to="/">
+                Home
+              </Nav.Link>
+              <Nav.Link as={Link} to="/about">
+                About
+              </Nav.Link>
+              <Nav.Link as={Link} to="/jobs">
+                Jobs
+              </Nav.Link>
 
               {user?.role === "job_seeker" && (
-                <Nav.Link as={Link} to="/job-services">My Jobs</Nav.Link>
+                <Nav.Link as={Link} to="/job-services">
+                  My Jobs
+                </Nav.Link>
               )}
 
-              <Nav.Link as={Link} to="/contact">Contact Us</Nav.Link>
-              <Nav.Link as={Link} to="/feedback">Feedback</Nav.Link>
+              <Nav.Link as={Link} to="/contact">
+                Contact Us
+              </Nav.Link>
+              <Nav.Link as={Link} to="/feedback">
+                Feedback
+              </Nav.Link>
             </Nav>
 
-            {/* RIGHT BUTTONS */}
+            {/* RIGHT SIDE BUTTONS */}
             <Nav>
               {!user ? (
                 <>
@@ -79,20 +104,32 @@ export default function TopNavbar() {
                 </>
               ) : (
                 <>
-                  <span className="me-3 mt-1 fw-semibold text-white">
-                    Hello, {user.full_name}
-                  </span>
+                  <div className="user-dropdown">
+                    <span
+                      className="user-name"
+                      onClick={() => setShowMenu((prev) => !prev)}
+                    >
+                      Hello, {user.full_name} ▼
+                    </span>
 
-                  <Button
-                    variant="outline-danger"
-                    className="logout-btn-custom"
-                    onClick={() => {
-                      logout();
-                      navigate("/");
-                    }}
-                  >
-                    Logout
-                  </Button>
+                    {showMenu && (
+                      <div className="dropdown-menu-user">
+                        <p onClick={() => navigate("/profile")}>My Profile</p>
+                        <p onClick={() => navigate("/profile/edit")}>
+                          Edit Profile
+                        </p>
+                        <p
+                          className="logout-option"
+                          onClick={() => {
+                            logout();
+                            navigate("/");
+                          }}
+                        >
+                          Logout
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </>
               )}
             </Nav>

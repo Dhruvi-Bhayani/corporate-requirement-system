@@ -1,0 +1,68 @@
+.profile-edit-container {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 40px;
+  background: linear-gradient(135deg, #141e30, #243b55);
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+  color: #fff;
+  animation: fadeIn 0.7s ease-in-out;
+}
+
+.profile-edit-container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #00ffd5;
+}
+
+.profile-edit-container input,
+.profile-edit-container textarea {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 18px;
+  border-radius: 10px;
+  border: none;
+  font-size: 15px;
+  outline: none;
+  background: rgba(255,255,255,0.1);
+  color: white;
+}
+
+.profile-edit-container input::placeholder,
+.profile-edit-container textarea::placeholder {
+  color: #aaa;
+}
+
+.profile-edit-container textarea {
+  height: 120px;
+  resize: none;
+}
+
+.profile-edit-container button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #00c853, #00bfa5);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.profile-edit-container button:hover {
+  background: linear-gradient(135deg, #00bfa5, #00c853);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
