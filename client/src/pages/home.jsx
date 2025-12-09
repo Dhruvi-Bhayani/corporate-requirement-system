@@ -6,7 +6,7 @@ import StatsSection from "../components/StatsSection";
 import ImageSlider from "../components/ImageSlider";
 
 import "./HomeFeedback.css";
-import "./Home.css"; // ⭐ CSS import
+import "./home.css";
 
 export default function Home() {
   const [jobs, setJobs] = useState([]);
