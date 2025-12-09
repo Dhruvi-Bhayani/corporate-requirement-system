@@ -1,0 +1,41 @@
+:root {
+  --brand: #0d6efd;
+}
+
+/* container spacing already handled by bootstrap */
+.text-truncate {
+  white-space: normal;
+}
+
+/* allow description wrapping; remove if you prefer truncation */
+
+.card:hover {
+  transform: translateY(-2px);
+  transition: all .18s ease;
+}
+
+/* responsive card improvements */
+@media (max-width: 768px) {
+  .card-body {
+    padding: 1rem;
+  }
+}
+
+/* Make page take full height */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Layout wrapper */
+.app-wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main content grows to push footer down */
+.app-content {
+  flex: 1;
+}

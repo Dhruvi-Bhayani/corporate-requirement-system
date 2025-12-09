@@ -1,0 +1,85 @@
+/* Background wrapper */
+.feedback-bg {
+  min-height: 100vh;
+  background: url("/bg1.jpg") center/cover no-repeat fixed;
+  padding-bottom: 50px;
+  padding-top: 40px;
+}
+
+/* Title with glow */
+.feedback-title {
+  color: white;
+  font-size: 42px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 30px;
+  animation: fadeIn 1s ease-out;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+}
+
+/* Card styling */
+.feedback-card {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 18px;
+  padding: 22px;
+  border-left: 6px solid #ffae00;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  margin: 15px auto;
+  max-width: 700px;
+  transition: 0.3s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideIn 0.5s forwards ease-out;
+}
+
+.feedback-card:nth-child(1) { animation-delay: 0.2s; }
+.feedback-card:nth-child(2) { animation-delay: 0.35s; }
+.feedback-card:nth-child(3) { animation-delay: 0.5s; }
+
+/* Hover effect */
+.feedback-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* Star icon animated */
+.star-icon {
+  font-size: 26px;
+  color: #ffbd00;
+  animation: starPulse 1.5s infinite ease-in-out;
+}
+
+/* Rating text */
+.rating {
+  font-size: 22px;
+  font-weight: 700;
+  color: #333;
+}
+
+/* Message */
+.feedback-message {
+  font-size: 18px;
+  margin-top: 10px;
+  color: #444;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Slide animation */
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Star pulse */
+@keyframes starPulse {
+  0% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.9; }
+}

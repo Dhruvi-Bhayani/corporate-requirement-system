@@ -1,0 +1,56 @@
+/* Fade + Slide Animation */
+.feedback-animate {
+  opacity: 0;
+  transform: translateY(25px);
+  animation: fadeSlide 0.8s ease-out forwards;
+}
+
+@keyframes fadeSlide {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Feedback Card */
+.feedback-card-home {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 18px;
+  padding: 25px;
+  border-left: 6px solid #ffae00;
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.15);
+  transition: 0.3s ease;
+}
+
+.feedback-card-home:hover {
+  transform: translateY(-8px);
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* Star Pulse Animation */
+.star-animated {
+  font-size: 26px;
+  color: #ffbd00;
+  animation: starPulse 1.5s infinite ease-in-out;
+}
+
+@keyframes starPulse {
+  0% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.9; }
+}
+
+/* Rating Number */
+.rating-text {
+  font-size: 22px;
+  font-weight: 700;
+  margin-left: 8px;
+  color: #222;
+}
+
+/* Message */
+.feedback-message {
+  font-size: 17px;
+  color: #333;
+  margin-top: 10px;
+}

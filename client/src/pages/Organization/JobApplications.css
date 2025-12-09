@@ -1,0 +1,192 @@
+/* ================================
+   🔵 PAGE TITLE
+================================ */
+.job-application-title {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 35px;
+  font-weight: 700;
+}
+
+/* ================================
+   🔵 APPLICANT GLASS CARD (FULL WIDTH)
+================================ */
+.applicant-card {
+  width: 100%;
+  padding: 30px;
+
+  background: rgba(255, 255, 255, 0.08);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.10),
+    rgba(255, 255, 255, 0.04)
+  );
+
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
+
+  margin-bottom: 25px;
+  color: #ffffff;
+}
+
+
+/* Applicant Name */
+.applicant-card h5 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+/* Regular Text */
+.applicant-card p {
+  color: #e8eeff;
+  margin: 6px 0;
+}
+
+/* Resume Link */
+.resume-link {
+  color: #aad3ff;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.resume-link:hover {
+  color: #ffffff;
+}
+
+/* ================================
+   🔵 STATUS BADGE (GLASS)
+================================ */
+.status-badge {
+  background: rgba(0, 132, 255, 0.45);
+  backdrop-filter: blur(6px);
+  color: white;
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ================================
+   🔵 BUTTON ROW
+================================ */
+.applicant-actions button {
+  padding: 8px 20px !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+}
+
+/* ================================
+   🔵 HISTORY SECTION
+================================ */
+.history-title {
+  font-weight: 700;
+  margin-top: 20px;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.history-box {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 15px;
+  border-left: 4px solid #2f6bff;
+  backdrop-filter: blur(10px);
+}
+
+.history-box ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.history-box hr {
+  margin: 10px 0;
+  opacity: 0.15;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ================================
+   🔵 INTERVIEW MODAL (GLASS)
+================================ */
+
+/* DARK BACKDROP */
+.modal-backdrop.show {
+  background: rgba(0, 0, 0, 0.75) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+/* MODAL WIDTH */
+.interview-modal .modal-dialog {
+  max-width: 480px !important;
+}
+
+/* GLASS NAVY CARD */
+.interview-modal .modal-content {
+  background: linear-gradient(
+    135deg,
+    rgba(5, 15, 35, 0.95),
+    rgba(12, 28, 60, 0.85)
+  ) !important;
+
+  border-radius: 20px !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8) !important;
+
+  padding: 25px !important;
+  backdrop-filter: blur(25px) saturate(200%) !important;
+}
+
+/* Modal Title */
+.interview-modal .modal-title {
+  color: #ffffff !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  text-align: center;
+  width: 100%;
+}
+
+/* Labels */
+.interview-modal label {
+  color: #d3e1ff !important;
+  font-weight: 600 !important;
+}
+
+/* Inputs */
+.interview-modal input,
+.interview-modal textarea {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 12px !important;
+  padding: 12px !important;
+  color: #ffffff !important;
+}
+
+.interview-modal input::placeholder,
+.interview-modal textarea::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Cancel Button */
+.interview-modal .btn-cancel {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: none !important;
+  color: #ffffff !important;
+  border-radius: 10px !important;
+  padding: 10px 20px !important;
+}
+
+/* Save Button */
+.interview-modal .btn-save {
+  background: linear-gradient(135deg, #2f6bff, #0044ff) !important;
+  border: none !important;
+  color: #ffffff !important;
+  border-radius: 10px !important;
+  padding: 10px 24px !important;
+  font-weight: 700 !important;
+}

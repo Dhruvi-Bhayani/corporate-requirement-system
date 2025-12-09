@@ -1,0 +1,75 @@
+/* Background */
+.otp-bg {
+    min-height: 100vh;
+    width: 100%;
+    background: url('/bg1.jpg') center/cover no-repeat fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Wrapper */
+.otp-wrapper {
+    min-height: calc(100vh - 80px);
+    /* account for navbar */
+    margin-top: -60px;
+    /* move card up */
+}
+
+
+/* Frosted Glass Card */
+.otp-card {
+    width: 420px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    color: #fff;
+}
+
+/* Title */
+.otp-title {
+    font-weight: 700;
+    color: #fff;
+}
+
+/* OTP Input Boxes */
+.otp-box-wrapper {
+    gap: 10px;
+}
+
+.otp-input {
+    width: 50px;
+    height: 55px;
+    font-size: 22px;
+    font-weight: 600;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    color: #fff;
+}
+
+.otp-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.otp-input:focus {
+    outline: none;
+    border: 1.5px solid #3c7bff;
+}
+
+/* Button */
+.otp-btn {
+    background: #1A3D64;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.otp-btn:hover {
+    background-color: #0a7099;
+    opacity: 0.9;
+}
