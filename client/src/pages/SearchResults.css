@@ -1,0 +1,123 @@
+/* ===========================================================
+   ⭐ MAIN PAGE WRAPPER
+   =========================================================== */
+.search-results-container {
+  padding: 70px 0;
+  text-align: center;
+  min-height: 70vh;
+}
+
+/* ===========================================================
+   ⭐ HEADING
+   =========================================================== */
+.search-heading {
+  font-size: 38px;
+  font-weight: 800;
+  color: white;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+  margin-bottom: 50px;
+  letter-spacing: 1px;
+}
+
+/* ===========================================================
+   ⭐ SEARCH GRID (CENTERED)
+   =========================================================== */
+.search-grid {
+  width: 100%;
+  max-width: 1180px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 35px;
+  justify-content: center;
+}
+
+
+/* ===========================================================
+   ⭐ NO RESULTS (Container)
+   =========================================================== */
+.no-results-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* ===========================================================
+   ⭐ GLASS CARD FOR EMPTY STATE
+   =========================================================== */
+.no-results-glass {
+  width: 480px;
+  padding: 40px 30px;
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Image */
+.no-results-img {
+  width: 220px;
+  opacity: 0.95;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.25));
+}
+
+/* Title */
+.no-results-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 10px;
+}
+
+/* Text */
+.no-results-text {
+  color: #dbe9ff;
+  font-size: 17px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+/* ===========================================================
+   ⭐ BACK BUTTON
+   =========================================================== */
+.no-results-btn {
+  padding: 10px 22px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4da6ff, #1e71ff);
+  border: none;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+}
+
+.no-results-btn:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.1);
+}
+
+/* Make each card expand full just like /jobs page */
+.search-card-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+
+/* ===========================================================
+   ⭐ ANIMATION
+   =========================================================== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

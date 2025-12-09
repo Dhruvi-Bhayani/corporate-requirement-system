@@ -1,0 +1,86 @@
+/* body {
+  background-color: #f8f9fa;
+}
+
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+button.btn-primary {
+  background-color: #007bff;
+  border: none;
+  font-weight: 600;
+}
+
+button.btn-primary:hover {
+  background-color: #0056b3;
+} */
+
+
+/* Page background */
+body {
+  background-color: #f4f7fb !important;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Card animation */
+.card {
+  border-radius: 16px !important;
+  transition: transform 0.2s ease, box-shadow 0.25s ease;
+  border: none !important;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0px 10px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* Login button styling */
+button.btn-primary {
+  background-color: #0d6efd !important;
+  border-radius: 10px !important;
+  padding: 10px;
+  border: none !important;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  transition: background-color 0.2s ease;
+}
+
+button.btn-primary:hover {
+  background-color: #0b58d0 !important;
+}
+
+/* Form fields */
+.form-control {
+  border-radius: 10px !important;
+  padding: 12px;
+  font-size: 0.95rem;
+  border: 1px solid #ced4da;
+}
+
+.form-control:focus {
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.2) !important;
+}
+
+/* Sign up link */
+a.text-success {
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+a.text-success:hover {
+  color: #0a8f4e !important;
+  text-decoration: underline;
+}
+
+/* Title */
+h3 {
+  font-weight: 700;
+  color: #0d6efd;
+}

@@ -1,0 +1,270 @@
+/* ------------------------------------------------------
+   GLOBAL FONT
+------------------------------------------------------ */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Disable body scroll when modal is open */
+body.modal-open {
+  overflow: hidden !important;
+}
+
+/* ------------------------------------------------------
+   BACKGROUND OVERLAY
+------------------------------------------------------ */
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s ease;
+  z-index: 9998;
+}
+
+.auth-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ------------------------------------------------------
+   POPUP CONTAINER
+------------------------------------------------------ */
+.auth-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  width: 420px;
+  max-width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 16px;
+  padding: 28px;
+
+  backdrop-filter: blur(10px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s ease;
+  z-index: 9999;
+}
+
+.auth-container.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Scrollbar */
+.auth-container::-webkit-scrollbar {
+  width: 6px;
+}
+.auth-container::-webkit-scrollbar-thumb {
+  background: #c5c5c5;
+  border-radius: 10px;
+}
+.auth-container::-webkit-scrollbar-thumb:hover {
+  background: #9d9d9d;
+}
+
+/* ------------------------------------------------------
+   CLOSE BUTTON
+------------------------------------------------------ */
+.close-btn {
+  position: sticky;
+  top: 0;
+  margin-left: auto;
+  background: rgba(0, 0, 0, 0.08);
+
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 700;
+  color: #222;
+
+  transition: 0.25s ease;
+  z-index: 10;
+}
+
+.close-btn:hover {
+  background: rgba(0, 0, 0, 0.15);
+  color: #ff3e3e;
+  transform: scale(1.1);
+}
+
+/* ------------------------------------------------------
+   TITLE
+------------------------------------------------------ */
+.auth-form h2 {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: #0b1426;
+}
+
+/* ------------------------------------------------------
+   INPUT FIELDS
+------------------------------------------------------ */
+.input_box {
+  position: relative;
+  margin-top: 16px;
+}
+
+.input_box input,
+.input_box textarea {
+  width: 100%;
+  border: 1px solid #d0d4e0;
+  border-radius: 10px;
+  font-size: 15px;
+  background: #fff;
+  transition: 0.3s ease;
+  padding-left: 42px;
+}
+
+.input_box input {
+  height: 46px;
+}
+
+.input_box textarea {
+  height: 80px;
+  padding: 12px 14px;
+  resize: vertical;
+}
+
+.input_box input:focus,
+.input_box textarea:focus {
+  border-color: #7d2ae8;
+  box-shadow: 0 0 6px rgba(125, 42, 232, 0.35);
+}
+
+/* Input icons */
+.input_box i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #777;
+  pointer-events: none;
+}
+
+/* Password eye icon */
+.pw_hide {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #777;
+  cursor: pointer;
+  z-index: 20;
+}
+
+/* ------------------------------------------------------
+   ROLE BUTTONS
+------------------------------------------------------ */
+.role-select {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.role-select button {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 10px;
+  border: 2px solid #7d2ae8;
+  background: transparent;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.role-select button.active {
+  background: #7d2ae8;
+  color: white;
+}
+
+.role-select button:hover {
+  background: #f2e7ff;
+}
+
+/* ------------------------------------------------------
+   BUTTON
+------------------------------------------------------ */
+.button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #7d2ae8;
+  color: #fff;
+  cursor: pointer;
+
+  transition: 0.25s ease;
+}
+
+.button:hover {
+  background: #5b18c4;
+}
+
+/* ------------------------------------------------------
+   LOGIN / SIGNUP SWITCH
+------------------------------------------------------ */
+.login_signup {
+  text-align: center;
+  margin-top: 14px;
+  font-size: 14px;
+}
+
+.login_signup span {
+  color: #7d2ae8;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login_signup span:hover {
+  text-decoration: underline;
+}
+
+/* ------------------------------------------------------
+   KEEP YOUR BACKGROUND IMAGE
+------------------------------------------------------ */
+body {
+  background: url("/bg1.jpg") center/cover no-repeat fixed !important;
+}
+
+/* ------------------------------------------------------
+   RESPONSIVE
+------------------------------------------------------ */
+@media (max-width: 480px) {
+  .auth-container {
+    width: 92%;
+    padding: 20px;
+  }
+}
