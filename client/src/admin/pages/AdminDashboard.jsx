@@ -3,6 +3,9 @@ import axios from "axios";
 import AdminSidebar from "../components/AdminSidebar";
 import "./AdminDashboard.css";
 
+// ✅ PRODUCTION BASE URL
+const API_BASE = "https://corporate-requirement-system-production.up.railway.app";
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -11,15 +14,20 @@ export default function AdminDashboard() {
     const fetchStats = async () => {
       try {
         const token = localStorage.getItem("admin_token");
-        const res = await axios.get("http://localhost:3000/api/admin/stats", {
-          headers: { Authorization: `Bearer ${token}` },
+
+        const res = await axios.get(`${API_BASE}/api/admin/stats`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
+
         setStats(res.data);
       } catch (err) {
         console.log("Dashboard stats error:", err);
       }
       setLoading(false);
     };
+
     fetchStats();
   }, []);
 
@@ -29,9 +37,10 @@ export default function AdminDashboard() {
 
       <div className="admin-content">
         <h1 className="admin-title">Admin Dashboard</h1>
-        <p className="admin-subtitle">Overview of platform activity & performance</p>
+        <p className="admin-subtitle">
+          Overview of platform activity & performance
+        </p>
 
-        {/* Loading */}
         {loading ? (
           <p className="loading-text">Loading stats...</p>
         ) : (
@@ -40,36 +49,35 @@ export default function AdminDashboard() {
             <div className="stats-grid">
               <DashboardCard
                 title="Total Users"
-                value={stats.total_users}
+                value={stats?.total_users}
                 color="#6a00f4"
                 icon="👤"
               />
 
               <DashboardCard
                 title="Organizations"
-                value={stats.total_orgs}
+                value={stats?.total_orgs}
                 color="#0099ff"
                 icon="🏢"
               />
 
               <DashboardCard
                 title="Total Jobs"
-                value={stats.total_jobs}
+                value={stats?.total_jobs}
                 color="#ff7b00"
                 icon="💼"
               />
 
               <DashboardCard
                 title="Applications"
-                value={stats.total_applications}
+                value={stats?.total_applications}
                 color="#00c853"
                 icon="📄"
               />
 
-              {/* ⭐ NEW FEEDBACK CARD */}
               <DashboardCard
                 title="Feedback"
-                value={stats.total_feedbacks}
+                value={stats?.total_feedbacks}
                 color="#e91e63"
                 icon="💬"
               />
@@ -103,7 +111,6 @@ function DashboardCard({ title, value, color, icon }) {
   );
 }
 
-/* QUICK LINK COMPONENT */
 function QuickLink({ title, color, link }) {
   return (
     <a href={link} className="quick-link" style={{ borderLeftColor: color }}>

@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 
+// ✅ Railway Backend Base URL
+const BASE_URL = "https://corporate-requirement-system-production.up.railway.app";
+
 const Dashboard = () => {
   const { user, token } = useAuth(); // logged-in user
   const [users, setUsers] = useState([]);
@@ -9,8 +12,8 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/users", {
-          headers: { Authorization: `Bearer ${token}` }, // pass JWT
+        const res = await axios.get(`${BASE_URL}/api/users`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(res.data);
       } catch (err) {
@@ -36,6 +39,7 @@ const Dashboard = () => {
             <th className="border px-4 py-2">Role</th>
           </tr>
         </thead>
+
         <tbody>
           {users.length > 0 ? (
             users.map((u) => (
@@ -54,7 +58,6 @@ const Dashboard = () => {
             </tr>
           )}
         </tbody>
-
       </table>
     </div>
   );

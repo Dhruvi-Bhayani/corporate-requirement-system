@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./FeedbackView.css"; // ⭐ CSS file
+import "./FeedbackView.css";
 
 export default function FeedbackView() {
   const [feedback, setFeedback] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/feedback/all")
+    fetch("https://corporate-requirement-system-production.up.railway.app/api/feedback/all")
       .then((res) => res.json())
       .then((data) => setFeedback(data.data))
-      .catch((err) => console.error(err));
+      .catch((err) => console.error("Feedback fetch error:", err));
   }, []);
 
   return (
     <div className="feedback-bg">
-      
-      {/* ⭐ Back Button */}
       <div className="container">
         <button
           onClick={() => navigate(-1)}
@@ -31,7 +29,6 @@ export default function FeedbackView() {
         </button>
       </div>
 
-      {/* ⭐ Page Title */}
       <h2 className="feedback-title">User Feedback</h2>
 
       <div className="container py-4">
@@ -41,13 +38,11 @@ export default function FeedbackView() {
             className="feedback-card shadow-sm p-4"
             style={{ animationDelay: `${index * 0.15}s` }}
           >
-            {/* ⭐ Star + Rating */}
             <div className="d-flex align-items-center mb-2">
               <span className="star-icon">⭐</span>
               <span className="rating ms-2">{item.rating}</span>
             </div>
 
-            {/* ⭐ Message */}
             <p className="feedback-message">{item.message}</p>
           </div>
         ))}

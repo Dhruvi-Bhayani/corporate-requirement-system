@@ -3,60 +3,70 @@ import axios from "axios";
 import AdminSidebar from "../components/AdminSidebar";
 import "./AdminFeedback.css";
 
+// ✅ PRODUCTION BACKEND URL
+const API_BASE = "https://corporate-requirement-system-production.up.railway.app";
+
 export default function AdminFeedback() {
-    const [feedback, setFeedback] = useState([]);
+  const [feedback, setFeedback] = useState([]);
 
-    useEffect(() => {
-        const token = localStorage.getItem("admin_token");
+  useEffect(() => {
+    const token = localStorage.getItem("admin_token");
 
-        axios
-            .get("http://localhost:3000/api/admin/feedback", {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-            .then((res) => setFeedback(res.data.data))
-            .catch((err) => console.error("Admin feedback error:", err));
-    }, []);
+    axios
+      .get(`${API_BASE}/api/admin/feedback`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => setFeedback(res.data.data))
+      .catch((err) => console.error("Admin feedback error:", err));
+  }, []);
 
-    return (
-        <div className="admin-content admin-feedback-container">
-            <h2 className="admin-feedback-title">User Feedback</h2>
+  const handleDelete = async (id) => {
+    try {
+      const token = localStorage.getItem("admin_token");
 
-            <div className="feedback-grid">
-                {feedback.length === 0 ? (
-                    <p className="no-feedback">No feedback available</p>
-                ) : (
-                    feedback.map((item) => (
-                        <div key={item.id} className="feedback-card-admin">
-                            <div className="feedback-rating">
-                                ⭐ {item.rating}
-                            </div>
+      await axios.delete(`${API_BASE}/api/admin/feedback/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-                            <p className="feedback-message-admin">{item.message}</p>
-
-                            <button
-                                onClick={() => handleDelete(item.id)}
-                                className="delete-btn-admin"
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    ))
-                )}
-            </div>
-        </div>
-    );
-
-    function handleDelete(id) {
-        const token = localStorage.getItem("admin_token");
-
-        axios.delete(`http://localhost:3000/api/admin/feedback/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-        setFeedback(feedback.filter((f) => f.id !== id));
+      setFeedback(feedback.filter((f) => f.id !== id));
+    } catch (err) {
+      console.error("Delete feedback error:", err);
+      alert("❌ Failed to delete feedback");
     }
+  };
+
+  return (
+    <div className="admin-layout">
+      <AdminSidebar />
+
+      <div className="admin-content admin-feedback-container">
+        <h2 className="admin-feedback-title">User Feedback</h2>
+
+        <div className="feedback-grid">
+          {feedback.length === 0 ? (
+            <p className="no-feedback">No feedback available</p>
+          ) : (
+            feedback.map((item) => (
+              <div key={item.id} className="feedback-card-admin">
+                <div className="feedback-rating">⭐ {item.rating}</div>
+
+                <p className="feedback-message-admin">{item.message}</p>
+
+                <button
+                  onClick={() => handleDelete(item.id)}
+                  className="delete-btn-admin"
+                >
+                  Delete
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }

@@ -14,6 +14,7 @@ import {
 
 import { Bar, Pie } from "react-chartjs-2";
 
+// ✅ REGISTER CHART MODULES
 ChartJS.register(
   BarElement,
   CategoryScale,
@@ -23,6 +24,9 @@ ChartJS.register(
   Legend
 );
 
+// ✅ PRODUCTION BACKEND URL (RAILWAY)
+const API_BASE = "https://corporate-requirement-system-production.up.railway.app";
+
 export default function ReportsPage() {
   const [stats, setStats] = useState(null);
 
@@ -30,7 +34,7 @@ export default function ReportsPage() {
     try {
       const token = localStorage.getItem("admin_token");
 
-      const res = await axios.get("http://localhost:3000/api/admin/stats", {
+      const res = await axios.get(`${API_BASE}/api/admin/stats`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -46,7 +50,14 @@ export default function ReportsPage() {
 
   if (!stats)
     return (
-      <div style={{ marginLeft: "300px", padding: "40px", color: "white", fontSize: "20px" }}>
+      <div
+        style={{
+          marginLeft: "300px",
+          padding: "40px",
+          color: "white",
+          fontSize: "20px",
+        }}
+      >
         Loading reports...
       </div>
     );

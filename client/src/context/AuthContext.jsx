@@ -32,10 +32,13 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     try {
-      const res = await axios.post("http://localhost:3000/api/auth/login", {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        "https://corporate-requirement-system-production.up.railway.app/api/auth/login",
+        {
+          email,
+          password,
+        }
+      );
 
       const { token, user } = res.data;
 
