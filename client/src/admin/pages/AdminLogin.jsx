@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useAdminAuth } from "../AdminAuthContext";
 import "./AdminLogin.css";
 
-// ✅ PRODUCTION BACKEND URL
 const API_BASE = "https://corporate-requirement-system-production.up.railway.app";
 
 export default function AdminLogin() {
@@ -27,6 +26,7 @@ export default function AdminLogin() {
       adminLogin(res.data.admin, res.data.token);
       navigate("/admin/dashboard");
     } catch (err) {
+      console.error(err);
       setError(err.response?.data?.error || "Invalid credentials");
     }
   };
