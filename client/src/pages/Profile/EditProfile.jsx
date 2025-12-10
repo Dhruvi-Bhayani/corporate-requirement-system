@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./EditProfile.css";
 
+const BASE_URL = "https://corporate-requirement-system-production.up.railway.app";
+
 export default function EditProfile() {
   const navigate = useNavigate();
 
@@ -21,7 +23,7 @@ export default function EditProfile() {
       localStorage.getItem("auth_token");
 
     axios
-      .get("http://localhost:3000/api/profile", {
+      .get(`${BASE_URL}/api/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -63,7 +65,7 @@ export default function EditProfile() {
         .filter(Boolean);
 
       await axios.put(
-        "http://localhost:3000/api/profile",
+        `${BASE_URL}/api/profile`,
         {
           headline: form.headline,
           summary: form.summary,

@@ -2,7 +2,10 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAdminAuth } from "../AdminAuthContext";
-import "./AdminLogin.css";  // ⭐ ADD THIS
+import "./AdminLogin.css";
+
+// ✅ PRODUCTION BACKEND URL
+const API_BASE = "https://corporate-requirement-system-production.up.railway.app";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -17,7 +20,7 @@ export default function AdminLogin() {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/admin/login",
+        `${API_BASE}/api/admin/login`,
         { email, password }
       );
 

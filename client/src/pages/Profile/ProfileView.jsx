@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./ProfileView.css";
 
+const BASE_URL = "https://corporate-requirement-system-production.up.railway.app";
+
 export default function ProfileView() {
   const [profile, setProfile] = useState(null);
   const navigate = useNavigate();
@@ -14,19 +16,19 @@ export default function ProfileView() {
       localStorage.getItem("auth_token");
 
     axios
-      .get("http://localhost:3000/api/profile", {
+      .get(`${BASE_URL}/api/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
-        setProfile(res.data);   // ✅ THIS WAS MISSING
+        setProfile(res.data);
       })
       .catch((err) => {
         console.error("Profile fetch error:", err);
         alert("❌ Failed to load profile");
       });
-  }, []); // ✅ MUST BE EMPTY DEP ARRAY
+  }, []); // ✅ correct empty dependency array
 
   if (!profile) return <p style={{ color: "white" }}>Loading...</p>;
 
