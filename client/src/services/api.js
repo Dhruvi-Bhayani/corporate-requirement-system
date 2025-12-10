@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:3000/api",  // ✅ your backend port
+  baseURL: "https://corporate-requirement-system-production.up.railway.app/",  // ✅ your backend port
 });
 
 api.interceptors.request.use((config) => {
